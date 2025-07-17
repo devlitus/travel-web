@@ -1,0 +1,102 @@
+.custom-select{
+  &, &::picker(select) {
+    appearance: base-select;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-field label {
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper input,
+.input-wrapper select {
+  width: 100%;
+  background-color: hsl(var(--secondary) / 0.8);
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  color: hsl(var(--foreground));
+  transition: border-color 0.2s;
+}
+
+.input-wrapper input:focus,
+.input-wrapper select:focus {
+  outline: none;
+  border-color: hsl(var(--primary-color));
+  box-shadow: 0 0 0 2px hsl(var(--primary-color) / 0.3);
+}
+
+.input-wrapper select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+.activity-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background-color: hsl(var(--secondary) / 0.6);
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.activity-btn:hover {
+  background-color: hsl(var(--secondary));
+  border-color: hsl(var(--primary));
+  color: hsl(var(--foreground));
+}
+
+.activity-btn.active {
+  background-color: hsl(var(--primary-color) / 0.2);
+  border-color: hsl(var(--primary-color));
+  color: hsl(var(--primary-color));
+}
+
+.activity-btn svg {
+  width: 28px;
+  height: 28px;
+}
+
+.submit-btn {
+  padding: 1.25rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  background-image: linear-gradient(to right, #a855f7, #ec4899);
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+} 

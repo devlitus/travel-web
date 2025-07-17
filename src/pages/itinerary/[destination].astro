@@ -1,0 +1,142 @@
+---
+import Layout from "../../layouts/Layout.astro";
+export const prerender = false;
+const { destination } = Astro.params;
+---
+
+<Layout title={`Tu Itinerario para ${destination}`}>
+  <main id="itinerary-container" class="container mx-auto px-4 py-8">
+    <div id="loading-state" class="text-center">
+      <h1 class="text-4xl font-bold mb-4">Estamos diseñando tu aventura...</h1>
+      <p class="text-gray-400">
+        Un momento, el experto en viajes está creando tu itinerario
+        personalizado para {destination}.
+      </p>
+      {/* Puedes agregar aquí un spinner o una animación de carga */}
+    </div>
+  </main>
+</Layout>
+
+<script define:vars={{ destination }}>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const container = document.getElementById("itinerary-container");
+    if (!container) return;
+
+    const searchParams = new URLSearchParams(window.location.search);
+
+    const apiRequestData = {
+      destination, // Correctamente pasado desde el servidor
+      budget: searchParams.get("budget"),
+      duration: searchParams.get("duration"),
+      travelStyle: searchParams.get("travelStyle"),
+      accommodation: searchParams.get("accommodation"),
+      season: searchParams.get("season"),
+      activities: searchParams.getAll("activities"),
+    };
+
+    try {
+      const response = await fetch(`/api/search`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(apiRequestData),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(
+          `Error de la API: ${response.status} ${response.statusText} - ${errorText}`
+        );
+      }
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+
+      const { itinerary } = data;
+      if (!itinerary) throw new Error("No se recibió un itinerario válido.");
+
+      const dailyPlanHtml = itinerary.daily_plan
+        .map(
+          (day) => `
+            <div class="day-plan">
+              <h3 class="text-2xl font-semibold mb-3 day-title">Día ${day.day}: ${day.title}</h3>
+              <div class="activities-grid">
+                ${day.activities
+                  .map(
+                    (activity) => `
+                      <div class="activity-card">
+                        <h4 class="font-bold text-lg">${activity.time_of_day}</h4>
+                        <p class="text-gray-300">${activity.description}</p>
+                      </div>`
+                  )
+                  .join("")}
+              </div>
+            </div>`
+        )
+        .join("");
+
+      const travelTipsHtml = itinerary.travel_tips
+        .map((tip) => `<li>${tip}</li>`)
+        .join("");
+
+      container.innerHTML = `
+        <header class="itinerary-header text-center mb-12">
+          <h1 class="text-5xl font-extrabold mb-2">${
+            itinerary.destination_name
+          }</h1>
+          <p class="text-2xl text-gray-300">${itinerary.country}</p>
+          <img src="${
+            itinerary.image
+          }" alt="Imagen de ${itinerary.destination_name}" class="mt-6 rounded-lg shadow-lg mx-auto max-h-96" />
+        </header>
+
+        <div class="grid md:grid-cols-3 gap-8 mb-12">
+            <div class="info-card"><h2 class="text-xl font-bold mb-2">Duración</h2><p>${
+              itinerary.duration_days
+            } días</p></div>
+            <div class="info-card"><h2 class="text-xl font-bold mb-2">Alojamiento Sugerido</h2><p>${
+              itinerary.suggested_accommodation.type
+            } - ${
+              itinerary.suggested_accommodation.name
+            }</p><p class="text-sm text-gray-400">${
+              itinerary.suggested_accommodation.estimated_cost_range
+            }</p></div>
+            <div class="info-card"><h2 class="text-xl font-bold mb-2">Costo Total Estimado</h2><p>${
+              itinerary.budget_overview.total_estimated_cost
+            }</p></div>
+        </div>
+        
+        <section id="daily-plan"><h2 class="section-title">Plan Diario</h2>${dailyPlanHtml}</section>
+        
+        <section id="budget" class="mt-12">
+            <h2 class="section-title">Resumen del Presupuesto</h2>
+            <div class="budget-grid">
+                <div class="info-card"><strong>Alojamiento:</strong> ${
+                  itinerary.budget_overview.accommodation
+                }</div>
+                <div class="info-card"><strong>Comida:</strong> ${
+                  itinerary.budget_overview.food
+                }</div>
+                <div class="info-card"><strong>Actividades:</strong> ${
+                  itinerary.budget_overview.activities
+                }</div>
+                <div class="info-card"><strong>Transporte:</strong> ${
+                  itinerary.budget_overview.transportation
+                }</div>
+            </div>
+        </section>
+
+        <section id="tips" class="mt-12">
+            <h2 class="section-title">Consejos de Viaje</h2>
+            <ul class="tips-list">${travelTipsHtml}</ul>
+        </section>`;
+    } catch (e) {
+      container.innerHTML = `
+        <div class="text-center text-red-400">
+          <h1 class="text-4xl font-bold mb-4">Error al Generar Itinerario</h1>
+          <p class="mb-4">Hubo un problema al contactar al planificador de viajes.</p>
+          <p class="text-sm bg-gray-800 p-4 rounded-lg"><strong>Detalles:</strong> ${e.message}</p>
+          <a href="/" class="mt-8 inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Volver al inicio</a>
+        </div>`;
+    }
+  });
+</script>

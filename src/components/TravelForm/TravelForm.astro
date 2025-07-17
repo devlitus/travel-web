@@ -1,0 +1,449 @@
+---
+// This component will hold the main travel preferences form.
+import "./TravelForm.css";
+---
+
+<form class="glass-card rounded-2xl max-w-4xl mx-auto p-7">
+  <section class="activities-section text-center space-y-2">
+    <h2 class="text-3xl font-bold pb-4">Preferencias de Viaje</h2>
+    <p class="text-gray-400 mb-7">
+      Cada detalle cuenta para crear tu experiencia única
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div class="form-field">
+        <label for="destination">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"
+            ></path><circle cx="12" cy="10" r="3"></circle></svg
+          >
+          Destino soñado
+        </label>
+        <div class="input-wrapper">
+          <input
+            name="destination"
+            type="text"
+            id="destination"
+            placeholder="¿Dónde sueñas viajar? 🌍"
+          />
+        </div>
+      </div>
+
+      <!-- Presupuesto -->
+      <div class="form-field">
+        <label for="budget">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle
+              cx="12"
+              cy="12"
+              r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg
+          >
+          Presupuesto
+        </label>
+        <div class="input-wrapper">
+          <select id="budget" name="budget" class="custom-select">
+            <option selected disabled>¿Cuánto quieres invertir? 💸</option>
+            <option value="low">💰 Económico</option>
+            <option value="medium">💰💰 Moderado</option>
+            <option value="high">💰💰💰 Premium</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Duración del viaje -->
+      <div class="form-field">
+        <label for="duration">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line
+              x1="16"
+              x2="16"
+              y1="2"
+              y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line
+              x1="3"
+              x2="21"
+              y1="10"
+              y2="10"></line></svg
+          >
+          Duración del viaje
+        </label>
+        <div class="input-wrapper">
+          <select id="duration" name="duration" class="custom-select">
+            <option selected disabled>¿Cuánto tiempo tienes? ⏳</option>
+            <option value="weekend">🌙 Fin de semana</option>
+            <option value="1-week">🌙🌙 1 semana</option>
+            <option value="2-weeks">🌙🌙🌙 2 semanas</option>
+            <option value="month">🌙🌙🌙🌙 1 mes o más</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Estilo de viaje -->
+      <div class="form-field">
+        <label for="travel-style">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><rect width="20" height="14" x="2" y="7" rx="2" ry="2"></rect><path
+              d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg
+          >
+          Estilo de viaje
+        </label>
+        <div class="input-wrapper">
+          <select id="travel-style" name="travelStyle">
+            <option selected disabled>¿Cómo te gusta viajar? 🎒</option>
+            <option value="backpacking">🎒 Mochilero</option>
+            <option value="luxury">💎 Lujoso</option>
+            <option value="family">👨‍👩‍👧‍👦 Familiar</option>
+            <option value="adventure">🎢 Aventura</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Alojamiento -->
+      <div class="form-field">
+        <label for="accommodation">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+            ></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg
+          >
+          Alojamiento
+        </label>
+        <div class="input-wrapper">
+          <select id="accommodation" name="accommodation">
+            <option selected disabled>¿Dónde prefieres quedarte? 🏨</option>
+            <option value="hotel">🏨 Hotel</option>
+            <option value="hostel">🏨 Hostal</option>
+            <option value="apartment">🏨 Apartamento</option>
+            <option value="resort">🏨 Resort</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Época preferida -->
+      <div class="form-field">
+        <label for="season">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"
+            ></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"
+            ></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"
+            ></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"
+            ></path><path d="m19.07 4.93-1.41 1.41"></path></svg
+          >
+          Época preferida
+        </label>
+        <div class="input-wrapper">
+          <select id="season" name="season">
+            <option selected disabled>¿Cuándo quieres viajar? ☀️</option>
+            <option value="summer">🌞 Verano</option>
+            <option value="winter">❄️ Invierno</option>
+            <option value="spring">🌸 Primavera</option>
+            <option value="autumn">🍂 Otoño</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </section>
+  <hr class="my-12 border-gray-700" />
+
+  <section class="activities-section text-center space-y-5">
+    <h3 class="text-2xl font-bold">Actividades que te emocionan</h3>
+    <p class="text-gray-400 mb-7">
+      Selecciona todo lo que despierte tu curiosidad
+    </p>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+      <button type="button" class="activity-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path d="m8 3 4 8 5-5 5 15H2L8 3z"></path></svg
+        >
+        <span>Aventura</span>
+      </button>
+      <button type="button" class="activity-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path
+            d="M17.2 20.5c-2.3-1.2-4.5-2.8-6-4.8-1.5-2-2.3-4.2-2.3-6.6 0-2.4.8-4.7 2.3-6.6 1.5-2 3.7-3.5 6-4.8.4-.2.8-.4 1.2-.5.8-.2 1.5.3 1.7.9.2.7-.2 1.5-.9 1.7-.3.2-.7.3-1.1.5-2.1 1.2-4 2.6-5.4 4.5-1.3 1.9-2 3.9-2 6.1s.7 4.2 2 6.1c1.3 1.9 3.2 3.3 5.4 4.5.3.2.6.3 1 .5.7.2 1.1 1 .9 1.7-.2.7-.9 1.1-1.7.9-.5-.1-.9-.3-1.3-.5z"
+          ></path></svg
+        >
+        <span>Playa</span>
+      </button>
+      <button type="button" class="activity-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path d="M4 22h16"></path><path
+            d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18"></path><path
+            d="M10 22v-5"></path><path d="M14 22v-5"></path><path d="M10 12H6"
+          ></path><path d="M18 12h-4"></path><path d="M10 7H6"></path><path
+            d="M18 7h-4"></path></svg
+        >
+        <span>Cultura</span>
+      </button>
+      <button type="button" class="activity-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path
+            d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"
+          ></path></svg
+        >
+        <span>Historia</span>
+      </button>
+      <button type="button" class="activity-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path><path
+            d="M7 2v20"></path><path
+            d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Z"></path></svg
+        >
+        <span>Gastronomía</span>
+      </button>
+      <button type="button" class="activity-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path d="M12 22c-5 0-8-3.5-8-7s3-7 8-7 8 3.5 8 7-3 7-8 7z"
+          ></path><path
+            d="M12 14a2.5 2.5 0 0 0-2.5 2.5c0 1.5 1 2.5 2.5 2.5s2.5-1 2.5-2.5A2.5 2.5 0 0 0 12 14zM2 12s2-2 4-2c2 0 4 2 4 2M14 10s2 2 4 2c2 0 4-2 4-2"
+          ></path></svg
+        >
+        <span>Naturaleza</span>
+      </button>
+      <button type="button" class="activity-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"
+          ></path></svg
+        >
+        <span>Relax</span>
+      </button>
+      <button type="button" class="activity-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path
+            d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+          ></path></svg
+        >
+        <span>Romance</span>
+      </button>
+      <button type="button" class="activity-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path d="M17 18a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2"></path><rect
+            width="18"
+            height="18"
+            x="3"
+            y="4"
+            rx="2"></rect><circle cx="12" cy="10" r="2"></circle><line
+            x1="8"
+            x2="8"
+            y1="2"
+            y2="4"></line><line x1="16" x2="16" y1="2" y2="4"></line></svg
+        >
+        <span>Familia</span>
+      </button>
+      <button type="button" class="activity-btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path
+            d="m21.2 16.2-2.1-4.8-2.6-2.2-4-2.4-4.8-1.6-1.8.8.8 1.8 1.6 4.8 2.2 2.6 2.4 4 4.8 2.1 1.8-.8Z"
+          ></path><path d="m7.8 12.3 4.5-4.5"></path><path
+            d="m14.5 11-1 4.5-4.5-1"></path><path d="M12.4 6.2 6.2 12.4"
+          ></path></svg
+        >
+        <span>Deportes</span>
+      </button>
+    </div>
+  </section>
+
+  <div class="mt-16 text-center">
+    <button type="submit" class="submit-btn">
+      ✨ Crear Mi Aventura Perfecta ✨
+    </button>
+    <p class="text-gray-400 text-sm mt-2">
+      Prepárate para descubrir destinos increíbles 🌟
+    </p>
+  </div>
+</form>
+
+<script>
+  const form = document.querySelector("form") as HTMLFormElement;
+  const activityButtons = document.querySelectorAll(
+    ".activity-btn"
+  ) as NodeListOf<HTMLButtonElement>;
+
+  activityButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      button.classList.toggle("active");
+    });
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const formData = Object.fromEntries(data);
+
+    const selectedActivities = Array.from(activityButtons)
+      .filter((button) => button.classList.contains("active"))
+      .map((button) => button.querySelector("span")?.textContent?.trim());
+
+    const completeFormData = {
+      ...formData,
+      activities: selectedActivities.filter(Boolean),
+    };
+
+    const destination = formData.destination as string;
+    if (!destination) {
+      alert("Por favor, ingresa un destino.");
+      return;
+    }
+
+    // Usar URLSearchParams para construir el query string
+    const params = new URLSearchParams();
+
+    // Append all form fields
+    for (const [key, value] of Object.entries(formData)) {
+      if (value && key !== "destination") {
+        params.append(key, value as string);
+      }
+    }
+
+    // Append activities
+    selectedActivities.forEach((activity) => {
+      if (activity) {
+        params.append("activities", activity);
+      }
+    });
+
+    // Redirect to the dynamic page
+    window.location.href = `/itinerary/${encodeURIComponent(destination)}?${params.toString()}`;
+  });
+</script>
