@@ -132,7 +132,7 @@ export async function GET({ request }: { request: Request }) {
 
 ### Generación de Itinerarios
 
-- Páginas dinámicas en `/itinerary/[destination]`
+- Páginas dinámicas en `/itinerary/destination`
 - Usar los assets de imágenes existentes
 - Mantener el estilo visual consistente
 
