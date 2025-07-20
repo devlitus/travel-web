@@ -53,13 +53,10 @@ const { title, optional = false } = Astro.props;
 - **CSS classes**: kebab-case o BEM
 - **Variables**: camelCase en JS/TS, kebab-case en CSS
 
-### 4. Estilos CSS
+### 4. Estilos Tailwind CSS
 
-- Preferir CSS scoped en componentes
-- Usar `global.css` solo para estilos verdaderamente globales
-- Mantener especificidad baja
-- Usar variables CSS personalizadas para temas
-- Mobile-first approach
+- Usar Tailwind CSS para estilos globales
+- Clases utilitarias para componentes simples
 
 ### 5. TypeScript
 
