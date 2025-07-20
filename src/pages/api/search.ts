@@ -3,7 +3,6 @@ import type { APIRoute } from 'astro';
 import { GoogleGenAI } from '@google/genai';
 import { transformMarkdownToJson } from '../../utils/transformMarkdownToJson';
 import { z } from 'zod';
-import { GEMINI_API_KEY } from '../../constants/constanst';
 
 const travelSchema = z.object({
   destination: z.string().min(1, "El destino es requerido"),
@@ -16,6 +15,7 @@ const travelSchema = z.object({
 });
 
 export const POST: APIRoute = async ({ request }) => {
+  const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
   console.log('API Key:', GEMINI_API_KEY);
   if (!GEMINI_API_KEY) {
     return new Response(
@@ -38,12 +38,10 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
     
-    const ai = new GoogleGenAI({
-      apiKey: GEMINI_API_KEY,
-    });
+    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
     
     // Configurar el modelo usando la nueva API
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-2.0-flash';
     
     const systemInstruction = `Eres un experto planificador de viajes. Tu tarea es crear un itinerario de viaje detallado basado en las preferencias del usuario. Responde SOLO con un JSON válido, sin texto adicional, sin explicaciones y sin bloques de código markdown.
 
@@ -103,65 +101,9 @@ export const POST: APIRoute = async ({ request }) => {
       model: model,
       contents: systemInstruction + "\n\n" + query,
       config: {
-        temperature: 0,
-        candidateCount: 1,
-        responseJsonSchema:{
-          type: 'object',
-          properties: {
-            itinerary: {
-              type: 'object',
-              properties: {
-                destination_name: { type: 'string' },
-                country: { type: 'string' },
-                duration_days: { type: 'number' },
-                suggested_accommodation: {
-                  type: 'object',
-                  properties: {
-                    type: { type: 'string' },
-                    name: { type: 'string' },
-                    estimated_cost_range: { type: 'string' }
-                  }
-                },
-                daily_plan: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      day: { type: 'number' },
-                      title: { type: 'string' },
-                      activities: {
-                        type: 'array',
-                        items: {
-                          type: 'object',
-                          properties: {
-                            time_of_day: { type: 'string' },
-                            description: { type: 'string' }
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                budget_overview: {
-                  type: 'object',
-                  properties: {
-                    accommodation: { type: 'string' },
-                    food: { type: 'string' },
-                    activities: { type: 'string' },
-                    transportation: { type: 'string' },
-                    total_estimated_cost: { type: 'string' }
-                  }
-                },
-                travel_tips: {
-                  type: 'array',
-                  items: { type: 'string' }
-                }
-              }
-            }
-          },
-          required:['itinerary']
-        },
-        responseMimeType: 'application/json',
+        temperature: 0.1,
+        maxOutputTokens: 2048,
+        candidateCount: 1
       }
     });
     

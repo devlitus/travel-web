@@ -1,299 +1,142 @@
 ---
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner.astro";
 import Layout from "../../layouts/Layout.astro";
-
 export const prerender = false;
-
-interface Props {
-  // Esta interfaz puede expandirse para futuras props si es necesario
-}
-
 const { destination } = Astro.params;
-
-// Obtener parámetros de la URL
-const url = new URL(Astro.request.url);
-const searchParams = url.searchParams;
-
-// Preparar datos para la API
-const apiRequestData = {
-  destination: destination || "",
-  budget: searchParams.get("budget") || "medium",
-  duration: searchParams.get("duration") || "weekend",
-  travelStyle: searchParams.get("travelStyle") || "family",
-  accommodation: searchParams.get("accommodation") || "hotel",
-  season: searchParams.get("season") || "summer",
-  activities:
-    searchParams.getAll("activities").length > 0
-      ? searchParams.getAll("activities")
-      : ["sightseeing"],
-};
-
-let itineraryData = null;
-let error = null;
-
-// Hacer petición a nuestra propia API desde el servidor
-if (destination) {
-  try {
-    // Construir la URL completa para la API interna
-    const apiUrl = new URL("/api/search", Astro.url.origin);
-
-    const response = await fetch(apiUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(apiRequestData),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-        `Error de la API: ${response.status} ${response.statusText} - ${errorText}`
-      );
-    }
-
-    const data = await response.json();
-    if (data.error) {
-      throw new Error(data.error);
-    }
-
-    const { itinerary } = data;
-    if (!itinerary) {
-      throw new Error("No se recibió un itinerario válido.");
-    }
-
-    itineraryData = itinerary;
-
-    // Asignar imagen por defecto basada en el destino si no viene ninguna
-    if (!itineraryData.image || itineraryData.image === "") {
-      const destinationImages: Record<string, string> = {
-        paris: "/src/assets/images/paris.png",
-        roma: "/src/assets/images/roma.png",
-        "nueva york": "/src/assets/images/nueva-york.png",
-        tokio: "/src/assets/images/tokio.png",
-        sidney: "/src/assets/images/sidney.png",
-        montana: "/src/assets/images/montana.png",
-        tropical: "/src/assets/images/tropical.png",
-      };
-
-      const destinationKey = destination.toLowerCase();
-      itineraryData.image =
-        destinationImages[destinationKey] || "/src/assets/images/hero-bg.png";
-    }
-  } catch (e) {
-    console.error("Error generando itinerario:", e);
-    error = e instanceof Error ? e.message : "Error desconocido";
-  }
-} else {
-  error = "Destino no especificado";
-}
 ---
 
 <Layout title={`Tu Itinerario para ${destination}`}>
-  <main class="container mx-auto px-4 py-8 max-w-6xl">
-    {
-      error ? (
-        <div class="text-center text-red-400">
-          <h1 class="text-4xl font-bold mb-4">Error al Generar Itinerario</h1>
-          <p class="mb-4 text-lg text-gray-300">
-            Hubo un problema al generar tu itinerario personalizado.
-          </p>
-          <div class="bg-gray-800/50 p-6 rounded-lg border border-gray-700 mb-8">
-            <p class="text-sm text-left">
-              <strong class="text-red-400">Detalles:</strong>
-              <span class="text-gray-300">{error}</span>
-            </p>
-          </div>
-          <a
-            href="/"
-            class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
-          >
-            Volver al inicio
-          </a>
-        </div>
-      ) : itineraryData ? (
-        <>
-          <header class="text-center mb-16">
-            <h1 class="text-5xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
-              {itineraryData.destination_name}
-            </h1>
-            <p class="text-2xl md:text-3xl text-gray-300 mb-8">
-              {itineraryData.country}
-            </p>
-            <div class="relative overflow-hidden rounded-2xl shadow-2xl mx-auto max-w-4xl">
-              <img
-                src={itineraryData.image}
-                alt={`Imagen de ${itineraryData.destination_name}`}
-                class="w-full h-64 md:h-96 object-cover"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-            </div>
-          </header>
-
-          <div class="grid md:grid-cols-3 gap-6 mb-16">
-            <div class="glass-card p-6 rounded-xl">
-              <h2 class="text-xl font-bold mb-3 text-blue-400">Duración</h2>
-              <p class="text-2xl font-semibold text-white">
-                {itineraryData.duration_days} días
-              </p>
-            </div>
-            <div class="glass-card p-6 rounded-xl">
-              <h2 class="text-xl font-bold mb-3 text-blue-400">
-                Alojamiento Sugerido
-              </h2>
-              <p class="text-lg font-medium text-white mb-1">
-                {itineraryData.suggested_accommodation.type}
-              </p>
-              <p class="text-gray-300 mb-2">
-                {itineraryData.suggested_accommodation.name}
-              </p>
-              <p class="text-sm text-gray-400 bg-gray-800/30 px-2 py-1 rounded">
-                {itineraryData.suggested_accommodation.estimated_cost_range}
-              </p>
-            </div>
-            <div class="glass-card p-6 rounded-xl">
-              <h2 class="text-xl font-bold mb-3 text-blue-400">
-                Costo Total Estimado
-              </h2>
-              <p class="text-2xl font-bold text-green-400">
-                {itineraryData.budget_overview.total_estimated_cost}
-              </p>
-            </div>
-          </div>
-
-          <section id="daily-plan" class="mb-16">
-            <h2 class="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
-              Plan Diario
-            </h2>
-            <div class="space-y-8">
-              {itineraryData.daily_plan.map((day: any) => (
-                <div class="glass-card p-8 rounded-2xl border border-white/10">
-                  <h3 class="text-2xl md:text-3xl font-semibold mb-6 text-blue-400">
-                    Día {day.day}: {day.title}
-                  </h3>
-                  <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {day.activities.map((activity: any) => (
-                      <div class="bg-gray-800/40 p-5 rounded-xl border border-white/5 hover:border-white/20 transition-colors duration-200">
-                        <h4 class="font-bold text-lg mb-2 text-purple-400">
-                          {activity.time_of_day}
-                        </h4>
-                        <p class="text-gray-300 leading-relaxed">
-                          {activity.description}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section id="budget" class="mb-16">
-            <h2 class="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
-              Resumen del Presupuesto
-            </h2>
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div class="glass-card p-6 rounded-xl text-center">
-                <div class="text-3xl mb-2">🏨</div>
-                <h3 class="font-bold text-lg mb-2 text-blue-400">
-                  Alojamiento
-                </h3>
-                <p class="text-xl font-semibold text-white">
-                  {itineraryData.budget_overview.accommodation}
-                </p>
-              </div>
-              <div class="glass-card p-6 rounded-xl text-center">
-                <div class="text-3xl mb-2">🍽️</div>
-                <h3 class="font-bold text-lg mb-2 text-green-400">Comida</h3>
-                <p class="text-xl font-semibold text-white">
-                  {itineraryData.budget_overview.food}
-                </p>
-              </div>
-              <div class="glass-card p-6 rounded-xl text-center">
-                <div class="text-3xl mb-2">🎯</div>
-                <h3 class="font-bold text-lg mb-2 text-purple-400">
-                  Actividades
-                </h3>
-                <p class="text-xl font-semibold text-white">
-                  {itineraryData.budget_overview.activities}
-                </p>
-              </div>
-              <div class="glass-card p-6 rounded-xl text-center">
-                <div class="text-3xl mb-2">🚗</div>
-                <h3 class="font-bold text-lg mb-2 text-yellow-400">
-                  Transporte
-                </h3>
-                <p class="text-xl font-semibold text-white">
-                  {itineraryData.budget_overview.transportation}
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <section id="tips" class="mb-16">
-            <h2 class="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-              Consejos de Viaje
-            </h2>
-            <div class="glass-card p-8 rounded-2xl">
-              <ul class="space-y-4">
-                {itineraryData.travel_tips.map((tip: string) => (
-                  <li class="flex items-start space-x-3">
-                    <span class="text-yellow-400 text-xl mt-1">💡</span>
-                    <p class="text-gray-300 leading-relaxed">{tip}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-
-          <div class="text-center">
-            <a
-              href="/"
-              class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 transform hover:scale-105"
-            >
-              Planear Otro Viaje
-            </a>
-          </div>
-        </>
-      ) : (
-        <div class="flex justify-center items-center min-h-[60vh]">
-          <LoadingSpinner
-            message="Generando tu itinerario..."
-            destination={destination}
-          />
-        </div>
-      )
-    }
+  <main id="itinerary-container" class="container mx-auto px-4 py-8">
+    <div id="loading-state" class="text-center">
+      <h1 class="text-4xl font-bold mb-4">Estamos diseñando tu aventura...</h1>
+      <p class="text-gray-400">
+        Un momento, el experto en viajes está creando tu itinerario
+        personalizado para {destination}.
+      </p>
+      {/* Puedes agregar aquí un spinner o una animación de carga */}
+    </div>
   </main>
 </Layout>
 
-<style>
-  /* Solo mantenemos estilos específicos que no se pueden lograr fácilmente con Tailwind */
-  .glass-card {
-    background: rgba(25, 30, 50, 0.5);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
+<script define:vars={{ destination }}>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const container = document.getElementById("itinerary-container");
+    if (!container) return;
 
-  /* Animación personalizada para los elementos */
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
+    const searchParams = new URLSearchParams(window.location.search);
+
+    const apiRequestData = {
+      destination, // Correctamente pasado desde el servidor
+      budget: searchParams.get("budget"),
+      duration: searchParams.get("duration"),
+      travelStyle: searchParams.get("travelStyle"),
+      accommodation: searchParams.get("accommodation"),
+      season: searchParams.get("season"),
+      activities: searchParams.getAll("activities"),
+    };
+
+    try {
+      const response = await fetch(`/api/search`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(apiRequestData),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(
+          `Error de la API: ${response.status} ${response.statusText} - ${errorText}`
+        );
+      }
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+
+      const { itinerary } = data;
+      if (!itinerary) throw new Error("No se recibió un itinerario válido.");
+
+      const dailyPlanHtml = itinerary.daily_plan
+        .map(
+          (day) => `
+            <div class="day-plan">
+              <h3 class="text-2xl font-semibold mb-3 day-title">Día ${day.day}: ${day.title}</h3>
+              <div class="activities-grid">
+                ${day.activities
+                  .map(
+                    (activity) => `
+                      <div class="activity-card">
+                        <h4 class="font-bold text-lg">${activity.time_of_day}</h4>
+                        <p class="text-gray-300">${activity.description}</p>
+                      </div>`
+                  )
+                  .join("")}
+              </div>
+            </div>`
+        )
+        .join("");
+
+      const travelTipsHtml = itinerary.travel_tips
+        .map((tip) => `<li>${tip}</li>`)
+        .join("");
+
+      container.innerHTML = `
+        <header class="itinerary-header text-center mb-12">
+          <h1 class="text-5xl font-extrabold mb-2">${
+            itinerary.destination_name
+          }</h1>
+          <p class="text-2xl text-gray-300">${itinerary.country}</p>
+          <img src="${
+            itinerary.image
+          }" alt="Imagen de ${itinerary.destination_name}" class="mt-6 rounded-lg shadow-lg mx-auto max-h-96" />
+        </header>
+
+        <div class="grid md:grid-cols-3 gap-8 mb-12">
+            <div class="info-card"><h2 class="text-xl font-bold mb-2">Duración</h2><p>${
+              itinerary.duration_days
+            } días</p></div>
+            <div class="info-card"><h2 class="text-xl font-bold mb-2">Alojamiento Sugerido</h2><p>${
+              itinerary.suggested_accommodation.type
+            } - ${
+              itinerary.suggested_accommodation.name
+            }</p><p class="text-sm text-gray-400">${
+              itinerary.suggested_accommodation.estimated_cost_range
+            }</p></div>
+            <div class="info-card"><h2 class="text-xl font-bold mb-2">Costo Total Estimado</h2><p>${
+              itinerary.budget_overview.total_estimated_cost
+            }</p></div>
+        </div>
+        
+        <section id="daily-plan"><h2 class="section-title">Plan Diario</h2>${dailyPlanHtml}</section>
+        
+        <section id="budget" class="mt-12">
+            <h2 class="section-title">Resumen del Presupuesto</h2>
+            <div class="budget-grid">
+                <div class="info-card"><strong>Alojamiento:</strong> ${
+                  itinerary.budget_overview.accommodation
+                }</div>
+                <div class="info-card"><strong>Comida:</strong> ${
+                  itinerary.budget_overview.food
+                }</div>
+                <div class="info-card"><strong>Actividades:</strong> ${
+                  itinerary.budget_overview.activities
+                }</div>
+                <div class="info-card"><strong>Transporte:</strong> ${
+                  itinerary.budget_overview.transportation
+                }</div>
+            </div>
+        </section>
+
+        <section id="tips" class="mt-12">
+            <h2 class="section-title">Consejos de Viaje</h2>
+            <ul class="tips-list">${travelTipsHtml}</ul>
+        </section>`;
+    } catch (e) {
+      container.innerHTML = `
+        <div class="text-center text-red-400">
+          <h1 class="text-4xl font-bold mb-4">Error al Generar Itinerario</h1>
+          <p class="mb-4">Hubo un problema al contactar al planificador de viajes.</p>
+          <p class="text-sm bg-gray-800 p-4 rounded-lg"><strong>Detalles:</strong> ${e.message}</p>
+          <a href="/" class="mt-8 inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Volver al inicio</a>
+        </div>`;
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .glass-card {
-    animation: fadeInUp 0.6s ease-out;
-  }
-
-  /* Efecto hover personalizado para las tarjetas de actividades */
-  .glass-card:hover {
-    transform: translateY(-2px);
-    transition: all 0.3s ease;
-  }
-</style>
+  });
+</script>

@@ -62,10 +62,12 @@ const { title, description } = Astro.props;
 - APIs en `pages/api/` para endpoints del servidor
 - Usar `getStaticPaths()` para rutas dinámicas cuando sea necesario
 
-### 3. Estilos Tailwind CSS
+### 3. Estilos CSS
 
-- Usar Tailwind CSS para estilos
-- Clases utilitarias para estilos rápidos
+- Preferir CSS scoped en componentes cuando sea posible
+- Usar `global.css` para estilos generales
+- Crear archivos CSS específicos para páginas complejas
+- Mantener consistencia en naming conventions
 
 ### 4. Manejo de Assets
 
