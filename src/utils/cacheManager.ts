@@ -29,8 +29,6 @@ export class CacheManager {
     this.cleanupInterval = setInterval(() => {
       this.performCleanup();
     }, intervalMinutes * 60 * 1000);
-
-    console.log(`Cache auto-cleanup iniciado cada ${intervalMinutes} minutos`);
   }
 
   /**
@@ -40,7 +38,6 @@ export class CacheManager {
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
       this.cleanupInterval = null;
-      console.log('Cache auto-cleanup detenido');
     }
   }
 
@@ -48,18 +45,11 @@ export class CacheManager {
    * Realiza la limpieza de todos los caches
    */
   performCleanup(): void {
-    console.log('Iniciando limpieza de caches...');
-    
     const travelCleaned = travelCache.cleanup();
     const imageCleaned = imageCache.cleanup();
     const globalCleaned = globalCache.cleanup();
 
     const totalCleaned = travelCleaned + imageCleaned + globalCleaned;
-    
-    console.log(`Limpieza completada: ${totalCleaned} elementos eliminados`);
-    console.log(`- Travel cache: ${travelCleaned} elementos`);
-    console.log(`- Image cache: ${imageCleaned} elementos`);
-    console.log(`- Global cache: ${globalCleaned} elementos`);
   }
 
   /**
@@ -81,7 +71,6 @@ export class CacheManager {
     travelCache.clear();
     imageCache.clear();
     globalCache.clear();
-    console.log('Todos los caches han sido limpiados');
   }
 
   /**
@@ -89,7 +78,6 @@ export class CacheManager {
    */
   async preloadCommonData(): Promise<void> {
     // Aquí podrías precargar destinos populares o datos frecuentes
-    console.log('Precarga de datos comunes iniciada');
     
     // Ejemplo: precargar destinos populares
     const popularDestinations = [
@@ -97,7 +85,6 @@ export class CacheManager {
     ];
 
     // Esta función se puede expandir para precargar datos específicos
-    console.log(`Datos precargados para ${popularDestinations.length} destinos populares`);
   }
 }
 

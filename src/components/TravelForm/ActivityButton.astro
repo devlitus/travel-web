@@ -1,0 +1,13 @@
+---
+interface Props {
+  icon: string;
+  label: string;
+}
+
+const { icon, label } = Astro.props;
+---
+
+<button type="button" class="activity-btn">
+  <Fragment set:html={icon} />
+  <span>{label}</span>
+</button>

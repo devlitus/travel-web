@@ -26,7 +26,6 @@ export const POST: APIRoute = async ({ request }) => {
   
   try {
     const data = await request.json();
-    console.log('Datos recibidos en la API:', JSON.stringify(data, null, 2));
     const validatedData = travelSchema.parse(data);
     const { destination, budget, duration, travelStyle, accommodation, season, activities } = validatedData;
     
@@ -36,7 +35,6 @@ export const POST: APIRoute = async ({ request }) => {
     // Verificar cache primero
     const cachedResult = travelCache.get(cacheKey);
     if (cachedResult) {
-      console.log('Cache HIT para:', cacheKey);
       return new Response(
         JSON.stringify(cachedResult),
         { 
@@ -50,8 +48,6 @@ export const POST: APIRoute = async ({ request }) => {
         }
       );
     }
-    
-    console.log('Cache MISS para:', cacheKey);
     
     const query = `
      Busca ${destination} en ${budget} ${duration} ${travelStyle} ${accommodation} ${season} ${activities}
@@ -161,7 +157,6 @@ export const POST: APIRoute = async ({ request }) => {
 
       // Guardar en cache por 1 hora (3600 segundos)
       travelCache.set(cacheKey, parsedData, 3600);
-      console.log('Guardado en cache:', cacheKey);
 
       return new Response(
         JSON.stringify(parsedData),

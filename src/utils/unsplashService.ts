@@ -3,6 +3,8 @@
  * Permite buscar imágenes relacionadas con destinos de viaje
  */
 
+import { imageCache, generateCacheKey } from './cache';
+
 const UNSPLASH_ACCESS_KEY = 'ZmX6HByJ876NPUVONgRxlyARjZ8JsWfXH_8EfwqnoSc';
 const UNSPLASH_API_URL = 'https://api.unsplash.com/search/photos';
 
@@ -106,4 +108,58 @@ export function optimizeUnsplashImage(
   }
   
   return url.toString();
+}
+
+/**
+ * Obtiene la primera foto de un destino con cache integrado
+ * @param destination - Nombre del destino
+ * @param width - Ancho deseado para la optimización (por defecto 1200)
+ * @param height - Alto deseado para la optimización (por defecto 600)
+ * @param quality - Calidad de la imagen (por defecto 85)
+ * @returns Promise con la URL de la imagen optimizada o null si no se encuentra
+ */
+export async function getDestinationHeroImageCached(
+  destination: string,
+  width: number = 1200,
+  height: number = 600,
+  quality: number = 85
+): Promise<{ imageUrl: string; originalUrl: string } | null> {
+  const cacheKey = generateCacheKey('unsplash', { 
+    destination: destination.toLowerCase(),
+    width,
+    height,
+    quality
+  });
+  
+  // Verificar cache primero
+  const cachedImage = imageCache.get<{ imageUrl: string; originalUrl: string }>(cacheKey);
+  if (cachedImage) {
+    return cachedImage;
+  }
+
+  try {
+    // Obtener imagen desde Unsplash
+    const imageUrl = await getDestinationHeroImage(destination);
+    
+    if (!imageUrl) {
+      console.log('No se encontraron imágenes para:', destination);
+      return null;
+    }
+
+    // Optimizar la imagen
+    const optimizedImageUrl = optimizeUnsplashImage(imageUrl, width, height, quality);
+    
+    const responseData = { 
+      imageUrl: optimizedImageUrl,
+      originalUrl: imageUrl 
+    };
+    
+    // Guardar en cache por 24 horas
+    imageCache.set(cacheKey, responseData, 86400);
+    
+    return responseData;
+  } catch (error) {
+    console.error('Error al obtener imagen con cache:', error);
+    return null;
+  }
 }

@@ -1,0 +1,35 @@
+---
+interface Props {
+  name: string;
+  label: string;
+  icon: string;
+  type?: "text" | "select";
+  placeholder?: string;
+  options?: Array<{ value: string; label: string }>;
+}
+
+const { name, label, icon, type = "text", placeholder, options } = Astro.props;
+---
+
+<div class="form-field">
+  <label for={name}>
+    <Fragment set:html={icon} />
+    {label}
+  </label>
+  <div class="input-wrapper">
+    {
+      type === "text" ? (
+        <input name={name} type="text" id={name} placeholder={placeholder} />
+      ) : (
+        <select id={name} name={name} class="custom-select">
+          <option selected disabled>
+            {placeholder}
+          </option>
+          {options?.map((option) => (
+            <option value={option.value}>{option.label}</option>
+          ))}
+        </select>
+      )
+    }
+  </div>
+</div>
