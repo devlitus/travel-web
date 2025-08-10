@@ -395,16 +395,106 @@ import "./TravelForm.css";
 </form>
 
 <script>
+  import {
+    searchCache,
+    formCache,
+    debounce,
+    hashString,
+  } from "../../utils/clientCache";
+
+  // Definir interfaces TypeScript para el formulario
+  interface FormData {
+    destination?: string;
+    budget?: string;
+    duration?: string;
+    travelStyle?: string;
+    accommodation?: string;
+    season?: string;
+    activities?: string[];
+  }
+
   const form = document.querySelector("form") as HTMLFormElement;
   const activityButtons = document.querySelectorAll(
     ".activity-btn"
   ) as NodeListOf<HTMLButtonElement>;
 
+  // Cargar datos del formulario desde cache al inicializar
+  function loadFormFromCache() {
+    const cachedForm = formCache.get("last-form-data") as FormData | null;
+    if (cachedForm) {
+      // Restaurar campos del formulario
+      Object.entries(cachedForm).forEach(([key, value]) => {
+        if (key === "activities") return; // Manejar actividades por separado
+
+        const field = form.querySelector(`[name="${key}"]`) as
+          | HTMLInputElement
+          | HTMLSelectElement;
+        if (field) {
+          field.value = value as string;
+        }
+      });
+
+      // Restaurar actividades seleccionadas
+      if (cachedForm.activities && Array.isArray(cachedForm.activities)) {
+        activityButtons.forEach((button) => {
+          const buttonText = button.querySelector("span")?.textContent?.trim();
+          if (
+            buttonText &&
+            cachedForm.activities &&
+            cachedForm.activities.includes(buttonText)
+          ) {
+            button.classList.add("active");
+          }
+        });
+      }
+    }
+  }
+
+  // Guardar datos del formulario en cache (con debounce)
+  const saveFormToCache = debounce(() => {
+    const data = new FormData(form);
+    const formData = Object.fromEntries(data);
+
+    const selectedActivities = Array.from(activityButtons)
+      .filter((button) => button.classList.contains("active"))
+      .map((button) => button.querySelector("span")?.textContent?.trim())
+      .filter(Boolean) as string[];
+
+    const completeFormData: FormData = {
+      ...formData,
+      activities: selectedActivities,
+    };
+
+    // Guardar en cache por 24 horas
+    formCache.set("last-form-data", completeFormData, 24 * 60 * 60 * 1000);
+  }, 1000);
+
+  // Verificar cache de búsqueda anterior
+  function checkSearchCache(formData: any): any | null {
+    const searchKey = hashString(JSON.stringify(formData));
+    return searchCache.get(`search-${searchKey}`);
+  }
+
+  // Guardar resultado de búsqueda en cache
+  function saveSearchToCache(formData: any, result: any) {
+    const searchKey = hashString(JSON.stringify(formData));
+    // Guardar por 30 minutos
+    searchCache.set(`search-${searchKey}`, result, 30 * 60 * 1000);
+  }
+
+  // Inicializar: cargar datos desde cache
+  loadFormFromCache();
+
   activityButtons.forEach((button) => {
     button.addEventListener("click", () => {
       button.classList.toggle("active");
+      saveFormToCache(); // Guardar cuando cambian las actividades
     });
   });
+
+  // Guardar en cache cuando cambian los campos
+  form.addEventListener("input", saveFormToCache);
+  form.addEventListener("change", saveFormToCache);
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -426,24 +516,85 @@ import "./TravelForm.css";
       return;
     }
 
-    // Usar URLSearchParams para construir el query string
-    const params = new URLSearchParams();
-
-    // Append all form fields
-    for (const [key, value] of Object.entries(formData)) {
-      if (value && key !== "destination") {
-        params.append(key, value as string);
+    // Verificar si tenemos esta búsqueda en cache
+    const cachedResult = checkSearchCache(completeFormData);
+    if (cachedResult) {
+      console.log("Usando resultado desde cache");
+      // Si tenemos cache, ir directamente a la página con los datos
+      const params = new URLSearchParams();
+      for (const [key, value] of Object.entries(formData)) {
+        if (value && key !== "destination") {
+          params.append(key, value as string);
+        }
       }
+      selectedActivities.forEach((activity) => {
+        if (activity) {
+          params.append("activities", activity);
+        }
+      });
+
+      window.location.href = `/itinerary/${encodeURIComponent(destination)}?${params.toString()}`;
+      return;
     }
 
-    // Append activities
-    selectedActivities.forEach((activity) => {
-      if (activity) {
-        params.append("activities", activity);
-      }
-    });
+    // Mostrar indicador de carga
+    const submitBtn = form.querySelector(
+      'button[type="submit"]'
+    ) as HTMLButtonElement;
+    const originalText = submitBtn?.textContent || "Crear Itinerario";
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Generando itinerario...";
+    }
 
-    // Redirect to the dynamic page
-    window.location.href = `/itinerary/${encodeURIComponent(destination)}?${params.toString()}`;
+    try {
+      // Realizar la búsqueda
+      const response = await fetch("/api/search", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(completeFormData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+
+        // Guardar resultado en cache
+        saveSearchToCache(completeFormData, result);
+
+        // Usar URLSearchParams para construir el query string
+        const params = new URLSearchParams();
+
+        // Append all form fields
+        for (const [key, value] of Object.entries(formData)) {
+          if (value && key !== "destination") {
+            params.append(key, value as string);
+          }
+        }
+
+        // Append activities
+        selectedActivities.forEach((activity) => {
+          if (activity) {
+            params.append("activities", activity);
+          }
+        });
+
+        // Redirect to the dynamic page
+        window.location.href = `/itinerary/${encodeURIComponent(destination)}?${params.toString()}`;
+      } else {
+        console.error("Error en la búsqueda:", response.statusText);
+        alert("Error al generar el itinerario. Por favor, inténtalo de nuevo.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error de conexión. Por favor, verifica tu conexión a internet.");
+    } finally {
+      // Restaurar botón
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    }
   });
 </script>

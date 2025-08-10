@@ -1,1 +1,110 @@
- 
+/* Estilos específicos para la página de itinerario */
+
+.itinerary-header {
+  margin-bottom: 3rem;
+}
+
+.hero-background-container {
+  position: relative;
+  min-height: 320px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  margin: 0 auto;
+  max-height: 24rem;
+  height: 20rem;
+}
+
+.text-shadow-lg {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+
+@keyframes hero-loading {
+  0% {
+    background-position: 0 0, 15px 15px;
+  }
+  100% {
+    background-position: 30px 30px, 45px 45px;
+  }
+}
+
+/* Cards de información */
+.info-card {
+  background-color: #1f2937;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Plan diario */
+.day-plan {
+  margin-bottom: 2rem;
+  background-color: #1f2937;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.day-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #60a5fa;
+}
+
+.activities-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .activities-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.activity-card {
+  background-color: #374151;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Presupuesto */
+.budget-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .budget-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .budget-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Consejos de viaje */
+.tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tips-list li {
+  background-color: #1f2937;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  color: #d1d5db;
+  margin-bottom: 0.5rem;
+}

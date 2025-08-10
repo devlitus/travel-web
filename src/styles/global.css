@@ -83,3 +83,52 @@ input::placeholder {
 
 /* Force update */
 
+/* Hero Background Styles */
+.hero-background-container {
+  position: relative;
+  min-height: 320px;
+}
+
+.text-shadow-lg {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+#hero-background {
+  transition: background-image 0.5s ease-in-out;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Loading animation for hero background */
+#hero-background:not([style*="background-image"]) {
+  background: linear-gradient(
+    45deg,
+    #1e293b 25%,
+    transparent 25%,
+    transparent 75%,
+    #1e293b 75%,
+    #1e293b
+  ),
+  linear-gradient(
+    45deg,
+    #1e293b 25%,
+    transparent 25%,
+    transparent 75%,
+    #1e293b 75%,
+    #1e293b
+  );
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+  animation: hero-loading 1s linear infinite;
+}
+
+@keyframes hero-loading {
+  0% {
+    background-position: 0 0, 15px 15px;
+  }
+  100% {
+    background-position: 30px 30px, 45px 45px;
+  }
+}
+

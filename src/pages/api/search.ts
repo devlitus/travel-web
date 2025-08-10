@@ -2,6 +2,7 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 import { GoogleGenAI } from '@google/genai';
 import { transformMarkdownToJson } from '../../utils/transformMarkdownToJson';
+import { travelCache, generateCacheKey, generateETag, CACHE_HEADERS } from '../../utils/cache';
 import { z } from 'zod';
 
 const travelSchema = z.object({
@@ -16,7 +17,6 @@ const travelSchema = z.object({
 
 export const POST: APIRoute = async ({ request }) => {
   const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
-  console.log('API Key:', GEMINI_API_KEY);
   if (!GEMINI_API_KEY) {
     return new Response(
       JSON.stringify({ error: 'API key not configured' }),
@@ -27,7 +27,32 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     const data = await request.json();
     console.log('Datos recibidos en la API:', JSON.stringify(data, null, 2));
-    const { destination, budget, duration, travelStyle, accommodation, season, activities } = travelSchema.parse(data);
+    const validatedData = travelSchema.parse(data);
+    const { destination, budget, duration, travelStyle, accommodation, season, activities } = validatedData;
+    
+    // Generar clave de cache basada en todos los parámetros
+    const cacheKey = generateCacheKey('search', validatedData);
+    
+    // Verificar cache primero
+    const cachedResult = travelCache.get(cacheKey);
+    if (cachedResult) {
+      console.log('Cache HIT para:', cacheKey);
+      return new Response(
+        JSON.stringify(cachedResult),
+        { 
+          status: 200, 
+          headers: { 
+            'Content-Type': 'application/json',
+            ...CACHE_HEADERS.API_LONG,
+            'X-Cache': 'HIT',
+            'ETag': generateETag(cachedResult)
+          } 
+        }
+      );
+    }
+    
+    console.log('Cache MISS para:', cacheKey);
+    
     const query = `
      Busca ${destination} en ${budget} ${duration} ${travelStyle} ${accommodation} ${season} ${activities}
     `
@@ -94,9 +119,9 @@ export const POST: APIRoute = async ({ request }) => {
                     ]
                   }
                 }
-                
-                NO agregues texto antes o después del JSON. NO uses bloques de código markdown.`;
-    
+
+                NO agregues texto antes o después del JSON. NO uses bloques de código markdown. Siempre respnder en Español.`;
+
     const response = await ai.models.generateContent({
       model: model,
       contents: systemInstruction + "\n\n" + query,
@@ -134,9 +159,21 @@ export const POST: APIRoute = async ({ request }) => {
       // Asignar imagen vacía por ahora (la generación de imágenes se implementará más tarde)
       itinerary.image = '';
 
+      // Guardar en cache por 1 hora (3600 segundos)
+      travelCache.set(cacheKey, parsedData, 3600);
+      console.log('Guardado en cache:', cacheKey);
+
       return new Response(
         JSON.stringify(parsedData),
-        { status: 200, headers: { 'Content-Type': 'application/json' } }
+        { 
+          status: 200, 
+          headers: { 
+            'Content-Type': 'application/json',
+            ...CACHE_HEADERS.API_LONG,
+            'X-Cache': 'MISS',
+            'ETag': generateETag(parsedData)
+          } 
+        }
       );
     } catch (parseError) {
       console.error('Error parseando JSON:', parseError);

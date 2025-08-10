@@ -9,7 +9,34 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   adapter: vercel(),
 
+  // Configuración de cache y optimización
+  compressHTML: true,
+  
+  build: {
+    assets: 'assets',
+    inlineStylesheets: 'auto'
+  },
+
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    build: {
+      rollupOptions: {
+        output: {
+          // Cache busting para assets estáticos
+          assetFileNames: 'assets/[name].[hash][extname]',
+          chunkFileNames: 'chunks/[name].[hash].js',
+          entryFileNames: 'entry/[name].[hash].js',
+        }
+      },
+      // Optimizaciones adicionales
+      minify: 'esbuild',
+      cssMinify: true,
+      reportCompressedSize: false,
+      chunkSizeWarningLimit: 1000
+    },
+    // Cache de dependencias
+    optimizeDeps: {
+      include: ['@google/genai']
+    }
   }
 });
