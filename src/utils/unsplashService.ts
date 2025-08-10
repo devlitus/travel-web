@@ -134,12 +134,9 @@ export async function getDestinationHeroImageCached(
   // Verificar cache primero
   const cachedImage = imageCache.get<{ imageUrl: string; originalUrl: string }>(cacheKey);
   if (cachedImage) {
-    console.log('Cache HIT para imagen:', cacheKey);
     return cachedImage;
   }
 
-  console.log('Cache MISS para imagen:', cacheKey);
-  
   try {
     // Obtener imagen desde Unsplash
     const imageUrl = await getDestinationHeroImage(destination);
@@ -159,7 +156,6 @@ export async function getDestinationHeroImageCached(
     
     // Guardar en cache por 24 horas
     imageCache.set(cacheKey, responseData, 86400);
-    console.log('Imagen guardada en cache:', cacheKey);
     
     return responseData;
   } catch (error) {

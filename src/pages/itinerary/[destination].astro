@@ -10,9 +10,7 @@ const { destination } = Astro.params;
 // Obtener la imagen de hero durante el renderizado del servidor
 let heroImageData: { imageUrl: string; originalUrl: string } | null = null;
 try {
-  console.log("Intentando obtener imagen para destino:", destination);
   heroImageData = await getDestinationHeroImageCached(destination || "");
-  console.log("Imagen obtenida:", heroImageData);
 } catch (error) {
   console.error("Error al cargar imagen de hero:", error);
 }
@@ -26,7 +24,34 @@ try {
         Un momento, el experto en viajes está creando tu itinerario
         personalizado para {destination}.
       </p>
-      {/* Puedes agregar aquí un spinner o una animación de carga */}
+      <div class="loading-spinner">
+        <div class="spinner-airplane">✈️</div>
+        <div class="loading-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <div class="mt-8">
+        <a
+          href="/"
+          class="inline-flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Volver al inicio
+        </a>
+      </div>
     </div>
   </main>
 </Layout>
@@ -146,7 +171,16 @@ try {
         <section id="tips" class="mt-12">
             <h2 class="section-title">Consejos de Viaje</h2>
             <ul class="tips-list">${travelTipsHtml}</ul>
-        </section>`;
+        </section>
+
+        <div class="text-center mt-12 mb-8">
+            <a href="/" class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Planificar otro viaje
+            </a>
+        </div>`;
     } catch (e) {
       container.innerHTML = `
         <div class="text-center text-red-400">
