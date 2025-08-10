@@ -1,8 +1,21 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import { getDestinationHeroImageCached } from "../../utils/unsplashService";
 import "../../styles/itinerary.css";
+
 export const prerender = false;
+
 const { destination } = Astro.params;
+
+// Obtener la imagen de hero durante el renderizado del servidor
+let heroImageData: { imageUrl: string; originalUrl: string } | null = null;
+try {
+  console.log("Intentando obtener imagen para destino:", destination);
+  heroImageData = await getDestinationHeroImageCached(destination || "");
+  console.log("Imagen obtenida:", heroImageData);
+} catch (error) {
+  console.error("Error al cargar imagen de hero:", error);
+}
 ---
 
 <Layout title={`Tu Itinerario para ${destination}`}>
@@ -18,7 +31,7 @@ const { destination } = Astro.params;
   </main>
 </Layout>
 
-<script define:vars={{ destination }}>
+<script define:vars={{ destination, heroImageData }}>
   document.addEventListener("DOMContentLoaded", async () => {
     const container = document.getElementById("itinerary-container");
     if (!container) return;
@@ -79,50 +92,10 @@ const { destination } = Astro.params;
         .map((tip) => `<li>${tip}</li>`)
         .join("");
 
-      // Cargar imagen de background desde Unsplash
-      const loadHeroImage = async () => {
-        try {
-          const requestData = { destination: itinerary.destination_name };
-
-          const unsplashResponse = await fetch("/api/unsplash-image", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(requestData),
-          });
-
-          if (unsplashResponse.ok) {
-            const imageData = await unsplashResponse.json();
-
-            if (imageData.imageUrl) {
-              const heroBackground = document.getElementById("hero-background");
-              if (heroBackground) {
-                // Eliminar cualquier clase o estilo que pueda interferir
-                heroBackground.style.background = "none";
-                heroBackground.style.animation = "none";
-                // Aplicar la imagen de background
-                heroBackground.style.backgroundImage = `url(${imageData.imageUrl})`;
-                heroBackground.style.backgroundSize = "cover";
-                heroBackground.style.backgroundPosition = "center";
-                heroBackground.style.backgroundRepeat = "no-repeat";
-              }
-            }
-          }
-        } catch (error) {
-          console.warn("No se pudo cargar imagen de Unsplash:", error);
-          // Fallback: usar imagen por defecto o del itinerario si existe
-          if (itinerary.image) {
-            const heroBackground = document.getElementById("hero-background");
-            if (heroBackground) {
-              heroBackground.style.backgroundImage = `url(${itinerary.image})`;
-            }
-          }
-        }
-      };
-
       container.innerHTML = `
         <header class="itinerary-header text-center mb-12">
           <div class="hero-background-container relative rounded-lg overflow-hidden shadow-lg mx-auto max-h-96 h-80">
-            <div id="hero-background" class="absolute inset-0 bg-cover bg-center bg-no-repeat">
+            <div id="hero-background" class="absolute inset-0 bg-cover bg-center bg-no-repeat${heroImageData && heroImageData.imageUrl ? "" : " bg-gradient-to-r from-blue-600 to-purple-700"}" style="${heroImageData && heroImageData.imageUrl ? `background-image: url(${heroImageData.imageUrl});` : ""}">
               <div class="absolute inset-0 bg-opacity-40"></div>
             </div>
             <div class="relative z-10 flex flex-col justify-center items-center h-full text-white p-8">
@@ -174,9 +147,6 @@ const { destination } = Astro.params;
             <h2 class="section-title">Consejos de Viaje</h2>
             <ul class="tips-list">${travelTipsHtml}</ul>
         </section>`;
-
-      // Cargar imagen de background después de renderizar
-      loadHeroImage();
     } catch (e) {
       container.innerHTML = `
         <div class="text-center text-red-400">

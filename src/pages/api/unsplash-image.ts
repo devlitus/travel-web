@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
-import { getDestinationHeroImage, optimizeUnsplashImage } from '../../utils/unsplashService';
-import { imageCache, generateCacheKey, generateETag, CACHE_HEADERS } from '../../utils/cache';
+import { getDestinationHeroImageCached } from '../../utils/unsplashService';
+import { generateETag, CACHE_HEADERS } from '../../utils/cache';
 
 export const prerender = false;
 
@@ -57,33 +57,10 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Generar clave de cache para la imagen
-    const cacheKey = generateCacheKey('unsplash', { destination: destination.toLowerCase() });
+    // Usar el servicio con cache integrado
+    const imageData = await getDestinationHeroImageCached(destination);
     
-    // Verificar cache primero
-    const cachedImage = imageCache.get(cacheKey);
-    if (cachedImage) {
-      console.log('Cache HIT para imagen:', cacheKey);
-      return new Response(
-        JSON.stringify(cachedImage),
-        {
-          status: 200,
-          headers: { 
-            'Content-Type': 'application/json',
-            ...CACHE_HEADERS.IMAGES,
-            'X-Cache': 'HIT',
-            'ETag': generateETag(cachedImage)
-          },
-        }
-      );
-    }
-
-    console.log('Cache MISS para imagen:', cacheKey);
-
-    // Obtener imagen desde Unsplash
-    const imageUrl = await getDestinationHeroImage(destination);
-    
-    if (!imageUrl) {
+    if (!imageData) {
       return new Response(
         JSON.stringify({ error: 'No se encontraron imágenes para este destino' }),
         {
@@ -93,27 +70,14 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Optimizar la imagen para el uso como background
-    const optimizedImageUrl = optimizeUnsplashImage(imageUrl, 1200, 600, 85);
-
-    const responseData = { 
-      imageUrl: optimizedImageUrl,
-      originalUrl: imageUrl 
-    };
-
-    // Guardar en cache por 24 horas (las imágenes cambian poco)
-    imageCache.set(cacheKey, responseData, 86400);
-    console.log('Imagen guardada en cache:', cacheKey);
-
     return new Response(
-      JSON.stringify(responseData),
+      JSON.stringify(imageData),
       {
         status: 200,
         headers: { 
           'Content-Type': 'application/json',
           ...CACHE_HEADERS.IMAGES,
-          'X-Cache': 'MISS',
-          'ETag': generateETag(responseData)
+          'ETag': generateETag(imageData)
         },
       }
     );
