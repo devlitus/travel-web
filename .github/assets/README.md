@@ -5,9 +5,11 @@ Esta carpeta contiene imágenes y recursos para la documentación.
 ## Screenshots
 
 ### `screenshot.png`
+
 **Cómo crear el screenshot:**
 
 1. **Abre tu aplicación** en el navegador:
+
    ```bash
    npm run dev
    ```
@@ -19,7 +21,7 @@ Esta carpeta contiene imágenes y recursos para la documentación.
    - **Mac**: Cmd + Shift + 4
    - **Linux**: Gnome Screenshot o Spectacle
 
-4. **Dimensiones recomendadas**: 
+4. **Dimensiones recomendadas**:
    - Ancho: 1200px - 1400px
    - Alto: 700px - 900px
    - Formato: PNG (mejor calidad)

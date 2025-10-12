@@ -16,7 +16,7 @@ Una aplicación web moderna construida con **Astro 5.x** y **Gemini AI** que gen
 ### 📸 Preview
 
 ![Travel Web Screenshot](./.github/assets/screenshot.png)
-*Generador de itinerarios con IA - Formulario de preferencias*
+_Generador de itinerarios con IA - Formulario de preferencias_
 
 </div>
 
