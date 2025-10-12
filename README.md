@@ -1,8 +1,24 @@
 # 🌍 Travel Web - Generador de Itinerarios con IA
 
+<div align="center">
+
 Una aplicación web moderna construida con **Astro 5.x** y **Gemini AI** que genera itinerarios de viaje completos y personalizados en segundos.
 
-![Travel Web Preview](https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=400&fit=crop)
+[![Astro](https://img.shields.io/badge/Astro-5.14.4-FF5D01?style=for-the-badge&logo=astro&logoColor=white)](https://astro.build/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1.11-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](CONTRIBUTING.md)
+[![Stars](https://img.shields.io/github/stars/devlitus/travel-web?style=for-the-badge)](https://github.com/devlitus/travel-web/stargazers)
+
+### 📸 Preview
+
+![Travel Web Screenshot](./.github/assets/screenshot.png)
+*Generador de itinerarios con IA - Formulario de preferencias*
+
+</div>
 
 ---
 
