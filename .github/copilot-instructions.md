@@ -2,11 +2,11 @@
 
 ## Contexto del Proyecto
 
-Este es un proyecto de aplicación web de viajes construido con **Astro 4.x**, TypeScript y CSS vanilla. La aplicación permite buscar destinos de viaje y generar itinerarios personalizados.
+Este es un proyecto de aplicación web de viajes construido con **Astro 5.x**, TypeScript y CSS vanilla. La aplicación permite buscar destinos de viaje y generar itinerarios personalizados.
 
 ## Tecnologías Principales
 
-- **Framework**: Astro 4.x
+- **Framework**: Astro 5.x
 - **Lenguaje**: TypeScript
 - **Estilos**: CSS vanilla (scoped y global)
 - **Deployment**: Estático (SSG)
