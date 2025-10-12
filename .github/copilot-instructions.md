@@ -1,15 +1,27 @@
 # Instrucciones para GitHub Copilot - Travel Web
 
+## 🎯 Propósito de Este Documento
+
+Guía de desarrollo con **convenciones de código, patrones y mejores prácticas** específicas para este proyecto.
+
+**Para otras referencias**:
+- 📋 [Business Rules](./business-rules.md) - Especificaciones técnicas detalladas
+- 📋 [Project Briefing](./project-briefing.md) - Visión y estrategia del producto
+
+---
+
 ## Contexto del Proyecto
 
-Este es un proyecto de aplicación web de viajes construido con **Astro 5.x**, TypeScript y CSS vanilla. La aplicación permite buscar destinos de viaje y generar itinerarios personalizados.
+Aplicación web de generación de itinerarios de viaje construida con **Astro 5.x**, **Gemini AI** y **Tailwind CSS**. Genera itinerarios personalizados usando IA basándose en preferencias del usuario.
 
-## Tecnologías Principales
+## Stack Tecnológico
 
-- **Framework**: Astro 5.x
-- **Lenguaje**: TypeScript
-- **Estilos**: CSS vanilla (scoped y global)
-- **Deployment**: Estático (SSG)
+- **Framework**: Astro 5.14.4 (SSG + API Routes)
+- **Lenguaje**: TypeScript 5.9.2
+- **Estilos**: Tailwind CSS 4.1.11
+- **IA**: Google Gemini 2.0 Flash
+- **Validación**: Zod
+- **Deployment**: Vercel
 
 ## Reglas de Codificación
 
@@ -53,10 +65,12 @@ const { title, optional = false } = Astro.props;
 - **CSS classes**: kebab-case o BEM
 - **Variables**: camelCase en JS/TS, kebab-case en CSS
 
-### 4. Estilos Tailwind CSS
+### 4. Estilos con Tailwind CSS
 
-- Usar Tailwind CSS para estilos globales
-- Clases utilitarias para componentes simples
+- **Preferir utility classes** de Tailwind para todo lo posible
+- CSS custom solo cuando sea absolutamente necesario
+- Usar clases responsive: `md:`, `lg:`, etc.
+- Aprovechar el sistema de espaciado: `p-4`, `gap-6`, `mt-8`
 
 ### 5. TypeScript
 
@@ -121,22 +135,30 @@ export async function GET({ request }: { request: Request }) {
 
 ## Patrones Específicos del Proyecto
 
-### Búsqueda de Destinos
+### Formulario de Preferencias
 
-- Usar el componente `TravelForm` existente
-- Integrar con la API de búsqueda en `/api/search`
-- Mantener consistencia con los destinos existentes
+- Usar el componente `TravelForm` con sus 7 parámetros
+- Validar con el schema Zod definido en `/api/search.ts`
+- Mantener consistencia en labels e iconos
 
-### Generación de Itinerarios
+### Generación de Itinerarios con IA
 
+- Endpoint principal: `/api/search` (POST)
+- Usa Gemini AI 2.0 Flash con temperatura 0.1
+- Respuestas cacheadas por 1 hora
 - Páginas dinámicas en `/itinerary/[destination]`
-- Usar los assets de imágenes existentes
-- Mantener el estilo visual consistente
+
+### Sistema de Cache
+
+- Usar `MemoryCache` para almacenar respuestas de IA
+- TTL por defecto: 3600 segundos (1 hora)
+- Generar cache keys con `generateCacheKey()`
+- Incluir headers `X-Cache: HIT/MISS` en responses
 
 ### Manejo de Estados
 
 - Preferir URL state sobre JavaScript state
-- Usar query parameters para filtros
+- Usar `Astro.params` para rutas dinámicas
 - Mantener navegación bookmarkeable
 
 ## Comandos y Scripts
@@ -176,9 +198,17 @@ npm run check        # Type checking
 
 Este proyecto maneja:
 
-- Destinos de viaje (París, Roma, Nueva York, etc.)
-- Generación de itinerarios personalizados
-- Búsqueda y filtrado de destinos
-- Información turística y recomendaciones
+- **Generación de itinerarios con IA**: Cualquier destino del mundo
+- **Personalización**: 7 parámetros + actividades seleccionables
+- **Preferencias de viaje**: Presupuesto, duración, estilo, alojamiento, temporada
+- **Actividades**: Aventura, Playa, Cultura, Historia, Gastronomía, Naturaleza, Relax, Romance, Familia, Deportes
 
 Mantener siempre el contexto de viajes y turismo en las sugerencias y implementaciones.
+
+---
+
+## 📚 Documentación Relacionada
+
+- 📋 [business-rules.md](./business-rules.md) - Especificaciones técnicas y reglas de validación
+- 📋 [project-briefing.md](./project-briefing.md) - Visión, estrategia y roadmap del producto
+- 📦 [CACHE_SYSTEM.md](../CACHE_SYSTEM.md) - Documentación del sistema de cache

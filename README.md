@@ -1,64 +1,143 @@
-# 🌍 Travel Web - Generador de Itinerarios de Viaje
+# 🌍 Travel Web - Generador de Itinerarios con IA
 
-Una aplicación web moderna construida con **Astro 5.x** que permite a los usuarios buscar destinos de viaje y generar itinerarios personalizados basados en sus preferencias.
+Una aplicación web moderna construida con **Astro 5.x** y **Gemini AI** que genera itinerarios de viaje completos y personalizados en segundos.
 
 ![Travel Web Preview](https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=400&fit=crop)
 
-## ✨ Características
+---
 
-- 🔍 **Búsqueda inteligente** de destinos turísticos
-- 📋 **Generación automática** de itinerarios personalizados
-- 🎨 **Interfaz moderna** con Tailwind CSS
-- ⚡ **Rendimiento optimizado** con Astro SSG
-- 📱 **Diseño responsive** para todos los dispositivos
-- 🌐 **Integración con APIs** externas (Unsplash)
-- 💾 **Sistema de caché** optimizado
+## 📑 Tabla de Contenido
 
-## 🛠️ Tecnologías
+- [✨ Características](#-características-principales)
+- [📚 Documentación](#-documentación)
+- [🛠️ Stack Tecnológico](#️-stack-tecnológico)
+- [🚀 Inicio Rápido](#-inicio-rápido)
+- [🎯 Cómo Funciona](#-cómo-funciona)
+- [🏗️ Estructura del Proyecto](#️-estructura-del-proyecto)
+- [🚢 Deployment](#-deployment-en-vercel)
+- [🗺️ Roadmap](#️-roadmap)
+- [🤝 Contribuciones](#-contribuciones)
+- [📞 Soporte](#-soporte-y-contacto)
 
-- **Framework**: [Astro 5.x](https://astro.build/)
-- **Lenguaje**: TypeScript
-- **Estilos**: [Tailwind CSS 4.x](https://tailwindcss.com/)
-- **IA**: Google Generative AI
-- **Deployment**: [Vercel](https://vercel.com/)
-- **APIs**: Unsplash para imágenes
+---
 
-## 🚀 Estructura del Proyecto
+## ✨ Características Principales
+
+- 🤖 **Generación con IA** - Itinerarios únicos creados por Gemini AI 2.0 Flash
+- ⚡ **Ultra rápido** - Resultados en menos de 5 segundos
+- 🎯 **Personalización total** - 7 parámetros + actividades seleccionables
+- � **Responsive** - Perfectamente adaptado a todos los dispositivos
+- 💾 **Sistema de caché** - Respuestas optimizadas y reutilizadas
+- 🖼️ **Imágenes de calidad** - Integración con Unsplash API
+- 🚫 **Sin registro** - Experiencia sin fricción
+
+## 📚 Documentación
+
+### Para Desarrolladores
+
+- 📋 **[Business Rules](./.github/business-rules.md)** - Especificaciones técnicas completas
+  - Validaciones y schemas (Zod)
+  - Sistema de cache detallado
+  - Configuración de APIs
+  - Reglas de performance
+  - Checklist de implementación
+
+- 💻 **[Copilot Instructions](./.github/copilot-instructions.md)** - Guía de desarrollo
+  - Convenciones de código
+  - Estructura de componentes Astro
+  - Mejores prácticas
+  - Patrones del proyecto
+
+- � **[Cache System](./CACHE_SYSTEM.md)** - Sistema de cache en detalle
+  - Implementación de MemoryCache
+  - Estrategias de invalidación
+  - Uso y ejemplos
+
+### Para Producto y Negocio
+
+- 📋 **[Project Briefing](./.github/project-briefing.md)** - Visión y estrategia
+  - Objetivo y propuesta de valor
+  - Público objetivo
+  - Roadmap de producto (v1.0 → v3.5)
+  - Diferenciadores competitivos
+  - Definición de éxito
+
+### Instrucciones Específicas
+
+- 🎨 **[Astro Best Practices](./.github/instructions/astro-best-practices.instructions.md)**
+- 🎨 **[Tailwind Best Practices](./.github/instructions/tailwind-best-practices.instructions.md)**
+
+## 🛠️ Stack Tecnológico
+
+| Categoría      | Tecnología                               | Versión              |
+| -------------- | ---------------------------------------- | -------------------- |
+| **Framework**  | [Astro](https://astro.build/)            | 5.14.4               |
+| **Lenguaje**   | TypeScript                               | 5.9.2                |
+| **Estilos**    | [Tailwind CSS](https://tailwindcss.com/) | 4.1.11               |
+| **IA**         | Google Gemini AI                         | 2.0 Flash            |
+| **Validación** | Zod                                      | (via @astrojs/check) |
+| **Deployment** | [Vercel](https://vercel.com/)            | SSG + API Routes     |
+| **Imágenes**   | Unsplash API                             | -                    |
+
+## 🏗️ Estructura del Proyecto
 
 ```text
 travel-web/
+├── .github/
+│   ├── instructions/           # Instrucciones específicas por tipo
+│   ├── business-rules.md       # Especificaciones técnicas
+│   ├── project-briefing.md     # Visión y estrategia
+│   └── copilot-instructions.md # Guía de desarrollo
 ├── public/
 │   └── favicon.svg
 ├── src/
-│   ├── assets/           # Recursos estáticos
-│   │   └── images/       # Imágenes de destinos
-│   ├── components/       # Componentes reutilizables
-│   │   ├── Header/
-│   │   └── TravelForm/
-│   ├── layouts/          # Layouts base
-│   ├── pages/            # Páginas y API routes
-│   │   ├── api/          # Endpoints de la API
-│   │   └── itinerary/    # Páginas dinámicas de itinerarios
-│   ├── styles/           # Estilos globales
-│   └── utils/            # Utilidades y servicios
-├── astro.config.mjs      # Configuración de Astro
-├── tailwind.config.js    # Configuración de Tailwind
-└── vercel.json           # Configuración de deployment
+│   ├── assets/
+│   │   └── images/             # Imágenes estáticas
+│   ├── components/
+│   │   ├── Header/             # Componente de cabecera
+│   │   └── TravelForm/         # Formulario principal
+│   │       ├── TravelForm.astro
+│   │       ├── FormField.astro
+│   │       ├── ActivitiesSection.astro
+│   │       ├── ActivityButton.astro
+│   │       ├── formHandler.ts
+│   │       └── searchHandler.ts
+│   ├── layouts/
+│   │   └── Layout.astro        # Layout base
+│   ├── pages/
+│   │   ├── index.astro         # Página principal
+│   │   ├── api/
+│   │   │   ├── search.ts       # Endpoint de búsqueda con IA
+│   │   │   └── unsplash-image.ts
+│   │   └── itinerary/
+│   │       └── [destination].astro  # Página dinámica de itinerarios
+│   ├── styles/
+│   │   ├── global.css          # Estilos globales
+│   │   └── itinerary.css       # Estilos específicos
+│   └── utils/
+│       ├── cache.ts            # Sistema de cache
+│       ├── cacheManager.ts
+│       ├── clientCache.ts
+│       ├── systemInstructions.ts
+│       ├── transformMarkdownToJson.ts
+│       └── unsplashService.ts
+├── astro.config.mjs            # Configuración de Astro
+├── tailwind.config.js          # Configuración de Tailwind
+├── tsconfig.json               # Configuración de TypeScript
+├── vercel.json                 # Configuración de Vercel
+├── CACHE_SYSTEM.md             # Documentación del cache
+└── package.json
 ```
 
-## 🧞 Comandos Disponibles
-
-Todos los comandos se ejecutan desde la raíz del proyecto:
-
-| Comando           | Acción                                               |
-| :---------------- | :--------------------------------------------------- |
-| `npm install`     | Instala las dependencias                             |
-| `npm run dev`     | Inicia el servidor de desarrollo en `localhost:4321` |
-| `npm run build`   | Construye el sitio para producción en `./dist/`      |
-| `npm run preview` | Previsualiza la build localmente                     |
-| `npm run astro`   | Ejecuta comandos CLI de Astro                        |
-
 ## 🚀 Inicio Rápido
+
+### Prerrequisitos
+
+- Node.js 20+
+- npm o pnpm
+- API Keys (ver configuración)
+
+### Instalación
 
 1. **Clona el repositorio**
 
@@ -75,11 +154,20 @@ Todos los comandos se ejecutan desde la raíz del proyecto:
 
 3. **Configura las variables de entorno**
 
-   ```bash
-   # Crea un archivo .env.local con:
-   GOOGLE_AI_API_KEY=tu_api_key_de_google_ai
+   Crea un archivo `.env` en la raíz del proyecto:
+
+   ```env
+   # Requerido
+   GEMINI_API_KEY=tu_api_key_de_gemini
+
+   # Opcional (para imágenes)
    UNSPLASH_ACCESS_KEY=tu_access_key_de_unsplash
    ```
+
+   > 📝 **Cómo obtener las API Keys:**
+   >
+   > - **Gemini AI**: [https://ai.google.dev/](https://ai.google.dev/)
+   > - **Unsplash**: [https://unsplash.com/developers](https://unsplash.com/developers)
 
 4. **Inicia el servidor de desarrollo**
 
@@ -89,82 +177,181 @@ Todos los comandos se ejecutan desde la raíz del proyecto:
 
 5. **Abre tu navegador** en `http://localhost:4321`
 
-## 🎯 Funcionalidades Principales
+### Comandos Disponibles
 
-### Búsqueda de Destinos
+| Comando           | Acción                                               |
+| :---------------- | :--------------------------------------------------- |
+| `npm install`     | Instala las dependencias                             |
+| `npm run dev`     | Inicia el servidor de desarrollo en `localhost:4321` |
+| `npm run build`   | Construye el sitio para producción en `./dist/`      |
+| `npm run preview` | Previsualiza la build localmente                     |
+| `npm run astro`   | Ejecuta comandos CLI de Astro                        |
 
-- Formulario intuitivo para capturar preferencias de viaje
-- Filtros por tipo de actividad, presupuesto y duración
-- Sugerencias automáticas de destinos populares
+## 🎯 Cómo Funciona
 
-### Generación de Itinerarios
+### Flujo de Usuario
 
-- Itinerarios personalizados basados en IA
-- Recomendaciones de actividades y lugares
-- Integración con imágenes de alta calidad
+```
+1. Usuario completa formulario con preferencias
+   ├── Destino (texto libre)
+   ├── Presupuesto (económico/moderado/premium)
+   ├── Duración (fin de semana a 1 mes)
+   ├── Estilo de viaje (mochilero/lujo/familiar/aventura)
+   ├── Alojamiento (hotel/hostal/apartamento/resort)
+   ├── Temporada (verano/invierno/primavera/otoño)
+   └── Actividades (múltiple selección)
 
-### Sistema de Caché
+2. Sistema envía preferencias a Gemini AI
 
-- Caché inteligente para mejorar el rendimiento
-- Gestión automática de datos temporales
-- Optimización de llamadas a APIs externas
+3. IA genera itinerario completo (2-5 segundos)
+   ├── Descripción del destino
+   ├── Plan día por día
+   ├── Actividades con horarios
+   ├── Ubicaciones específicas
+   ├── Costos estimados
+   └── Tips y recomendaciones
 
-## 📁 Destinos Disponibles
+4. Usuario visualiza itinerario personalizado
+   └── Con imagen del destino (Unsplash)
+```
 
-El proyecto incluye información detallada para destinos como:
+### Características Técnicas Clave
 
-- 🗼 **París** - La ciudad del amor
-- 🏛️ **Roma** - Historia y cultura
-- 🗽 **Nueva York** - La gran manzana
-- 🗾 **Tokio** - Tradición y modernidad
-- 🎭 **Sidney** - Belleza natural
-- 🏔️ **Montana** - Aventura en la naturaleza
-- 🏝️ **Destinos tropicales** - Playas paradisíacas
+- **Cache inteligente**: Las respuestas se cachean durante 1 hora (TTL configurable)
+- **Validación robusta**: Todos los inputs validados con Zod schemas
+- **SSG optimizado**: Páginas pre-renderizadas para máxima velocidad
+- **API Routes**: Endpoints serverless en Vercel
+- **Type-safe**: TypeScript en todo el proyecto
 
-## 🔧 Configuración Avanzada
+## � Deployment en Vercel
 
-### Personalización de Estilos
+### Deployment Automático
 
-El proyecto utiliza Tailwind CSS con configuración personalizada. Puedes modificar los estilos en:
+1. **Conecta tu repositorio** a Vercel
+2. **Configura las variables de entorno** en el dashboard:
+   ```
+   GEMINI_API_KEY=tu_api_key
+   UNSPLASH_ACCESS_KEY=tu_access_key (opcional)
+   ```
+3. **Deploy automático** en cada push a `main` o `develop`
 
-- `src/styles/global.css` - Estilos globales
-- `src/components/*/**.css` - Estilos de componentes
+### Variables de Entorno en Vercel
 
-### APIs y Servicios
+Ve a: `Project Settings → Environment Variables`
 
-- **Google AI**: Generación de contenido de itinerarios
-- **Unsplash**: Obtención de imágenes de destinos
-- **Cache System**: Sistema de caché personalizado
+| Variable              | Tipo   | Requerido   | Descripción                 |
+| --------------------- | ------ | ----------- | --------------------------- |
+| `GEMINI_API_KEY`      | Secret | ✅ Sí       | API key de Google Gemini AI |
+| `UNSPLASH_ACCESS_KEY` | Secret | ⚠️ Opcional | Para imágenes de destinos   |
 
-## 🚢 Deployment
+### Performance
 
-El proyecto está configurado para deployment automático en Vercel:
-
-1. Conecta tu repositorio a Vercel
-2. Configura las variables de entorno en el dashboard
-3. El deployment se ejecuta automáticamente en cada push
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT. Ve el archivo [LICENSE](LICENSE) para más detalles.
-
-## 🤝 Contribuciones
-
-Las contribuciones son bienvenidas. Por favor:
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-## 📞 Soporte
-
-Si tienes preguntas o problemas, puedes:
-
-- Crear un [issue](https://github.com/devlitus/travel-web/issues)
-- Contactar al equipo de desarrollo
+- ✅ **SSG por defecto**: Páginas pre-renderizadas
+- ✅ **Edge Functions**: API routes optimizadas
+- ✅ **Cache headers**: Configurados automáticamente
+- ✅ **Asset optimization**: Hash automático en builds
 
 ---
 
-⭐ ¡No olvides dar una estrella al proyecto si te ha sido útil!
+## 🗺️ Roadmap
+
+### ✅ v1.0 - MVP (Actual)
+
+- Formulario de preferencias
+- Generación con IA
+- Sistema de cache
+- Responsive design
+
+### � v2.0 - Persistencia (Próximo)
+
+- URLs únicas para compartir itinerarios
+- Sistema de favoritos
+- Guardar itinerarios
+
+### 🚀 v2.5 - Mejoras UX
+
+- Editar itinerarios generados
+- Exportar a PDF
+- Mapa interactivo
+- Integración con calendario
+
+### 💰 v3.0 - Monetización
+
+- Links de afiliación (hoteles, vuelos)
+- Booking de actividades
+- Versión Premium
+
+> 📋 Para roadmap completo y detallado, ver [project-briefing.md](./.github/project-briefing.md)
+
+---
+
+## 🤝 Contribuciones
+
+Las contribuciones son bienvenidas!
+
+### Cómo Contribuir
+
+1. **Fork** el proyecto
+2. Crea una **rama** para tu feature:
+   ```bash
+   git checkout -b feature/AmazingFeature
+   ```
+3. **Commit** tus cambios:
+   ```bash
+   git commit -m 'Add: AmazingFeature'
+   ```
+4. **Push** a la rama:
+   ```bash
+   git push origin feature/AmazingFeature
+   ```
+5. Abre un **Pull Request**
+
+### Guías de Contribución
+
+Antes de contribuir, por favor revisa:
+
+- 📋 [Business Rules](./.github/business-rules.md) - Reglas técnicas
+- 💻 [Copilot Instructions](./.github/copilot-instructions.md) - Convenciones de código
+- 🎨 [Astro Best Practices](./.github/instructions/astro-best-practices.instructions.md)
+
+---
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
+
+---
+
+## 📞 Soporte y Contacto
+
+### Reportar Issues
+
+¿Encontraste un bug o tienes una sugerencia?
+
+- 🐛 [Crear un Issue](https://github.com/devlitus/travel-web/issues)
+- 💬 [Discussions](https://github.com/devlitus/travel-web/discussions)
+
+### Recursos Adicionales
+
+- 📖 [Documentación de Astro](https://docs.astro.build)
+- 🎨 [Documentación de Tailwind CSS](https://tailwindcss.com/docs)
+- 🤖 [Google Gemini AI](https://ai.google.dev/)
+
+---
+
+## 👨‍💻 Autor
+
+**@devlitus**
+
+- GitHub: [@devlitus](https://github.com/devlitus)
+- Repository: [travel-web](https://github.com/devlitus/travel-web)
+
+---
+
+<div align="center">
+
+⭐ **¡Si este proyecto te resultó útil, considera darle una estrella!** ⭐
+
+**Construido con ❤️ usando Astro y Gemini AI**
+
+</div>
