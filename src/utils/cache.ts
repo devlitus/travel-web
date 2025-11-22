@@ -83,16 +83,18 @@ export class MemoryCache {
    */
   cleanup(): number {
     const now = Date.now();
-    let cleaned = 0;
-    
-    for (const [key, item] of this.cache.entries()) {
+    const keysToDelete: string[] = [];
+
+    // Usar Array.from para evitar problemas con iteradores en TypeScript
+    Array.from(this.cache.entries()).forEach(([key, item]) => {
       if (now > item.expiresAt) {
-        this.cache.delete(key);
-        cleaned++;
+        keysToDelete.push(key);
       }
-    }
-    
-    return cleaned;
+    });
+
+    keysToDelete.forEach(key => this.cache.delete(key));
+
+    return keysToDelete.length;
   }
 }
 
@@ -121,7 +123,7 @@ export function generateCacheKey(prefix: string, params: Record<string, any>): s
     .sort()
     .map(key => `${key}=${encodeURIComponent(String(params[key]))}`)
     .join('&');
-  
+
   return `${prefix}:${sortedParams}`;
 }
 
@@ -134,23 +136,23 @@ export const CACHE_HEADERS = {
     'Cache-Control': 'public, max-age=3600, s-maxage=21600',
     'Vary': 'Accept-Encoding'
   },
-  
+
   // Para APIs que cambian frecuentemente (5 minutos browser, 1 hora CDN)
   API_SHORT: {
     'Cache-Control': 'public, max-age=300, s-maxage=3600',
     'Vary': 'Accept-Encoding'
   },
-  
+
   // Para assets estáticos (1 año)
   STATIC: {
     'Cache-Control': 'public, max-age=31536000, immutable'
   },
-  
+
   // Para imágenes (1 día)
   IMAGES: {
     'Cache-Control': 'public, max-age=86400'
   },
-  
+
   // Sin cache
   NO_CACHE: {
     'Cache-Control': 'no-cache, no-store, must-revalidate',

@@ -1,9 +1,50 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import TravelForm from "../components/TravelForm/TravelForm.astro";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${Astro.site || Astro.url.origin}/#website`,
+      url: Astro.site || Astro.url.origin,
+      name: "TravelGen",
+      description: "Generador de itinerarios de viaje personalizados con IA",
+      inLanguage: "es-ES",
+    },
+    {
+      "@type": "Organization",
+      "@id": `${Astro.site || Astro.url.origin}/#organization`,
+      name: "TravelGen",
+      url: Astro.site || Astro.url.origin,
+      logo: {
+        "@type": "ImageObject",
+        url: `${Astro.site || Astro.url.origin}/favicon.svg`,
+      },
+      sameAs: [],
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${Astro.url.href}#webpage`,
+      url: Astro.url.href,
+      name: "TravelGen - Generador de Viajes Personalizado con IA",
+      isPartOf: { "@id": `${Astro.site || Astro.url.origin}/#website` },
+      about: { "@id": `${Astro.site || Astro.url.origin}/#organization` },
+      description:
+        "Crea itinerarios de viaje personalizados con inteligencia artificial. Descubre destinos, planifica actividades y obtén recomendaciones adaptadas a tu presupuesto.",
+      inLanguage: "es-ES",
+    },
+  ],
+};
 ---
 
-<Layout>
+<Layout
+  title="TravelGen - Generador de Viajes Personalizado con IA"
+  description="Crea itinerarios de viaje personalizados con inteligencia artificial. Descubre destinos, planifica actividades y obtén recomendaciones adaptadas a tu presupuesto y preferencias de viaje."
+  keywords="viajes, itinerarios, planificador de viajes, viajes personalizados, destinos turísticos, vacaciones, turismo, IA viajes, generador de itinerarios, planear viaje"
+  structuredData={structuredData}
+>
   <div class="relative overflow-hidden">
     <div
       class="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-blue-900/50 to-purple-900/50 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"

@@ -1,0 +1,11 @@
+# robots.txt para TravelGen
+
+# Permitir a todos los bots de búsqueda
+User-agent: *
+Allow: /
+
+# Bloquear rutas de API
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://travel-web.vercel.app/sitemap-index.xml

@@ -2,16 +2,24 @@
 import { defineConfig } from 'astro/config';
 
 import vercel from '@astrojs/vercel';
+import sitemap from '@astrojs/sitemap';
 
 import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://travel-web.vercel.app',
   adapter: vercel(),
+
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes('/api/'),
+    }),
+  ],
 
   // Configuración de cache y optimización
   compressHTML: true,
-  
+
   build: {
     assets: 'assets',
     inlineStylesheets: 'auto'

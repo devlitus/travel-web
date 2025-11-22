@@ -1,0 +1,119 @@
+---
+export interface Props {
+    title?: string;
+    description?: string;
+    image?: string;
+    url?: string;
+    type?: "website" | "article";
+    keywords?: string;
+    author?: string;
+    publishedTime?: string;
+    modifiedTime?: string;
+    noindex?: boolean;
+    nofollow?: boolean;
+    canonical?: string;
+    structuredData?: object;
+}
+
+const {
+    title = "TravelGen - Generador de Viajes Personalizado con IA",
+    description = "Crea itinerarios de viaje personalizados con inteligencia artificial. Descubre destinos, planifica actividades y obtén recomendaciones adaptadas a tu presupuesto y preferencias.",
+    image = "/og-image.jpg",
+    url = Astro.url.href,
+    type = "website",
+    keywords = "viajes, itinerarios, planificador de viajes, viajes personalizados, destinos turísticos, vacaciones, turismo, IA viajes, generador de itinerarios",
+    author = "TravelGen",
+    publishedTime,
+    modifiedTime,
+    noindex = false,
+    nofollow = false,
+    canonical = url,
+    structuredData,
+} = Astro.props;
+
+// Asegurar que la URL de la imagen sea absoluta
+const imageUrl = image.startsWith("http")
+    ? image
+    : new URL(image, Astro.site || Astro.url.origin).href;
+const canonicalUrl = canonical.startsWith("http")
+    ? canonical
+    : new URL(canonical, Astro.site || Astro.url.origin).href;
+
+// Datos estructurados por defecto para el sitio web
+const defaultStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "TravelGen",
+    description: description,
+    url: Astro.site || Astro.url.origin,
+    potentialAction: {
+        "@type": "SearchAction",
+        target: {
+            "@type": "EntryPoint",
+            urlTemplate: `${Astro.site || Astro.url.origin}/itinerary/{destination}`,
+        },
+        "query-input": "required name=destination",
+    },
+};
+
+const finalStructuredData = structuredData || defaultStructuredData;
+---
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="keywords" content={keywords} />
+<meta name="author" content={author} />
+<meta
+    name="robots"
+    content={`${noindex ? "noindex" : "index"},${nofollow ? "nofollow" : "follow"}`}
+/>
+<meta
+    name="googlebot"
+    content={`${noindex ? "noindex" : "index"},${nofollow ? "nofollow" : "follow"}`}
+/>
+<link rel="canonical" href={canonicalUrl} />
+
+<!-- Theme Color -->
+<meta name="theme-color" content="#1e3a8a" />
+<meta name="msapplication-TileColor" content="#1e3a8a" />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:image:alt" content={title} />
+<meta property="og:site_name" content="TravelGen" />
+<meta property="og:locale" content="es_ES" />
+{
+    publishedTime && (
+        <meta property="article:published_time" content={publishedTime} />
+    )
+}
+{
+    modifiedTime && (
+        <meta property="article:modified_time" content={modifiedTime} />
+    )
+}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={url} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageUrl} />
+<meta name="twitter:image:alt" content={title} />
+
+<!-- Additional SEO -->
+<meta name="language" content="Spanish" />
+<meta name="revisit-after" content="7 days" />
+<meta name="rating" content="general" />
+
+<!-- Structured Data (JSON-LD) -->
+<script
+    type="application/ld+json"
+    set:html={JSON.stringify(finalStructuredData)}
+/>

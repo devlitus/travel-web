@@ -14,13 +14,38 @@ try {
 } catch (error) {
   console.error("Error al cargar imagen de hero:", error);
 }
+
+// Formatear el nombre del destino para SEO
+const destinationName = destination
+  ? destination.charAt(0).toUpperCase() +
+    destination.slice(1).replace(/-/g, " ")
+  : "tu destino";
+
+// Datos estructurados para la página de itinerario
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "TravelAction",
+  name: `Itinerario de viaje a ${destinationName}`,
+  description: `Itinerario personalizado para viajar a ${destinationName} con recomendaciones de actividades, alojamiento y presupuesto.`,
+  target: {
+    "@type": "EntryPoint",
+    urlTemplate: Astro.url.href,
+  },
+};
 ---
 
-<Layout title={`Tu Itinerario para ${destination}`}>
+<Layout
+  title={`Itinerario de Viaje a ${destinationName} - TravelGen`}
+  description={`Descubre tu itinerario personalizado para ${destinationName}. Planifica actividades, encuentra alojamiento y gestiona tu presupuesto de viaje con recomendaciones basadas en IA.`}
+  keywords={`${destinationName}, itinerario ${destinationName}, viaje a ${destinationName}, qué hacer en ${destinationName}, turismo ${destinationName}, vacaciones ${destinationName}`}
+  image={heroImageData?.imageUrl}
+  type="article"
+  structuredData={structuredData}
+>
   <main id="itinerary-container" class="container mx-auto px-4 py-8">
     <div id="loading-state" class="text-center">
       <h1 class="text-4xl font-bold mb-4">Estamos diseñando tu aventura...</h1>
-      <p class="text-gray-400">
+      <p style="color: hsl(var(--muted-foreground));">
         Un momento, el experto en viajes está creando tu itinerario
         personalizado para {destination}.
       </p>
@@ -35,7 +60,10 @@ try {
       <div class="mt-8">
         <a
           href="/"
-          class="inline-flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200"
+          class="inline-flex items-center px-4 py-2 text-white font-medium rounded-lg transition-colors duration-200"
+          style="background-color: hsl(var(--secondary)); border: 1px solid hsl(var(--border));"
+          onmouseover="this.style.backgroundColor='hsl(var(--primary))'"
+          onmouseout="this.style.backgroundColor='hsl(var(--secondary))'"
         >
           <svg
             class="w-4 h-4 mr-2"
@@ -174,7 +202,7 @@ try {
         </section>
 
         <div class="text-center mt-12 mb-8">
-            <a href="/" class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg">
+            <a href="/" class="inline-flex items-center px-6 py-3 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg" style="background-color: hsl(var(--primary)); border: 1px solid hsl(var(--border));">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -186,8 +214,8 @@ try {
         <div class="text-center text-red-400">
           <h1 class="text-4xl font-bold mb-4">Error al Generar Itinerario</h1>
           <p class="mb-4">Hubo un problema al contactar al planificador de viajes.</p>
-          <p class="text-sm bg-gray-800 p-4 rounded-lg"><strong>Detalles:</strong> ${e.message}</p>
-          <a href="/" class="mt-8 inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Volver al inicio</a>
+          <p class="text-sm p-4 rounded-lg" style="background-color: hsl(var(--card)); border: 1px solid hsl(var(--border));"><strong>Detalles:</strong> ${e.message}</p>
+          <a href="/" class="mt-8 inline-block text-white font-bold py-2 px-4 rounded" style="background-color: hsl(var(--primary)); border: 1px solid hsl(var(--border));">Volver al inicio</a>
         </div>`;
     }
   });
