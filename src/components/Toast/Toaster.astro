@@ -1,0 +1,233 @@
+---
+/**
+ * Sistema de Toast personalizado para mostrar notificaciones
+ * Implementación ligera sin dependencias externas
+ */
+---
+
+<div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+  type ToastType = 'success' | 'error' | 'warning' | 'info' | 'loading';
+
+  interface ToastOptions {
+    message: string;
+    description?: string;
+    duration?: number;
+    type: ToastType;
+  }
+
+  class ToastManager {
+    private container: HTMLElement | null = null;
+    private toastCounter = 0;
+
+    constructor() {
+      if (typeof document !== 'undefined') {
+        this.container = document.getElementById('toast-container');
+      }
+    }
+
+    private getIcon(type: ToastType): string {
+      const icons = {
+        success: '✓',
+        error: '✕',
+        warning: '⚠',
+        info: 'ℹ',
+        loading: '⟳',
+      };
+      return icons[type];
+    }
+
+    private getColors(type: ToastType): { bg: string; border: string; icon: string } {
+      const colors = {
+        success: {
+          bg: 'hsl(142 76% 36% / 0.1)',
+          border: 'hsl(142 76% 36%)',
+          icon: 'hsl(142 76% 36%)',
+        },
+        error: {
+          bg: 'hsl(0 84% 60% / 0.1)',
+          border: 'hsl(0 84% 60%)',
+          icon: 'hsl(0 84% 60%)',
+        },
+        warning: {
+          bg: 'hsl(38 92% 50% / 0.1)',
+          border: 'hsl(38 92% 50%)',
+          icon: 'hsl(38 92% 50%)',
+        },
+        info: {
+          bg: 'hsl(221 83% 53% / 0.1)',
+          border: 'hsl(221 83% 53%)',
+          icon: 'hsl(221 83% 53%)',
+        },
+        loading: {
+          bg: 'hsl(var(--muted))',
+          border: 'hsl(var(--border))',
+          icon: 'hsl(var(--primary))',
+        },
+      };
+      return colors[type];
+    }
+
+    show(options: ToastOptions): number {
+      if (!this.container) return -1;
+
+      const toastId = this.toastCounter++;
+      const { message, description, duration = 5000, type } = options;
+      const colors = this.getColors(type);
+      const icon = this.getIcon(type);
+
+      const toast = document.createElement('div');
+      toast.id = `toast-${toastId}`;
+      toast.className = 'toast-item';
+      toast.setAttribute('role', 'alert');
+      toast.style.cssText = `
+        background-color: ${colors.bg};
+        border: 2px solid ${colors.border};
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: start;
+        gap: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        animation: slideIn 0.3s ease-out;
+        max-width: 400px;
+        color: hsl(var(--foreground));
+      `;
+
+      toast.innerHTML = `
+        <div class="toast-icon" style="
+          color: ${colors.icon};
+          font-size: 20px;
+          font-weight: bold;
+          flex-shrink: 0;
+          ${type === 'loading' ? 'animation: spin 1s linear infinite;' : ''}
+        ">${icon}</div>
+        <div style="flex: 1; min-width: 0;">
+          <div style="font-weight: 600; margin-bottom: ${description ? '4px' : '0'};">${message}</div>
+          ${description ? `<div style="font-size: 14px; opacity: 0.8;">${description}</div>` : ''}
+        </div>
+        <button class="toast-close" style="
+          background: none;
+          border: none;
+          color: hsl(var(--foreground));
+          opacity: 0.5;
+          cursor: pointer;
+          padding: 0;
+          font-size: 18px;
+          line-height: 1;
+          flex-shrink: 0;
+        " aria-label="Cerrar notificación">×</button>
+      `;
+
+      this.container.appendChild(toast);
+
+      const closeBtn = toast.querySelector('.toast-close');
+      closeBtn?.addEventListener('click', () => this.dismiss(toastId));
+
+      if (type !== 'loading' && duration > 0) {
+        setTimeout(() => this.dismiss(toastId), duration);
+      }
+
+      return toastId;
+    }
+
+    dismiss(toastId: number) {
+      const toast = document.getElementById(`toast-${toastId}`);
+      if (toast) {
+        toast.style.animation = 'slideOut 0.3s ease-in';
+        setTimeout(() => toast.remove(), 300);
+      }
+    }
+
+    success(message: string, description?: string) {
+      return this.show({ message, description, type: 'success' });
+    }
+
+    error(message: string, description?: string) {
+      return this.show({ message, description, type: 'error', duration: 7000 });
+    }
+
+    warning(message: string, description?: string) {
+      return this.show({ message, description, type: 'warning' });
+    }
+
+    info(message: string, description?: string) {
+      return this.show({ message, description, type: 'info' });
+    }
+
+    loading(message: string) {
+      return this.show({ message, type: 'loading', duration: 0 });
+    }
+  }
+
+  // Crear instancia global
+  const toastManager = new ToastManager();
+
+  // Exponer globalmente
+  if (typeof window !== 'undefined') {
+    (window as any).toast = toastManager;
+  }
+</script>
+
+<style>
+  #toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    pointer-events: none;
+  }
+
+  :global(.toast-item) {
+    pointer-events: auto;
+  }
+
+  :global(@keyframes slideIn) {
+    from {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  :global(@keyframes slideOut) {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+  }
+
+  :global(@keyframes spin) {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  :global(.toast-close:hover) {
+    opacity: 1 !important;
+  }
+
+  @media (max-width: 640px) {
+    #toast-container {
+      top: 10px;
+      right: 10px;
+      left: 10px;
+    }
+
+    :global(.toast-item) {
+      max-width: 100% !important;
+    }
+  }
+</style>

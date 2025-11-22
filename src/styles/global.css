@@ -2,32 +2,32 @@
 
 
 @theme {
-  --background: 180 73% 6%;
-  --foreground: 132 40% 92%;
-  --card: 180 60% 8%;
-  --card-foreground: 132 40% 92%;
-  --popover: 180 73% 6%;
-  --popover-foreground: 132 40% 92%;
-  --primary: 140 28% 48%;
-  --primary-foreground: 132 40% 92%;
-  --secondary: 168 48% 22%;
-  --secondary-foreground: 132 40% 92%;
-  --muted: 168 48% 22%;
-  --muted-foreground: 140 20% 70%;
-  --accent: 140 28% 48%;
-  --accent-foreground: 132 40% 92%;
+  --background: 210 41% 18%;
+  --foreground: 210 7% 85%;
+  --card: 210 29% 32%;
+  --card-foreground: 210 7% 85%;
+  --popover: 210 41% 18%;
+  --popover-foreground: 210 7% 85%;
+  --primary: 210 41% 18%;
+  --primary-foreground: 210 7% 85%;
+  --secondary: 210 29% 32%;
+  --secondary-foreground: 210 7% 85%;
+  --muted: 180 5% 72%;
+  --muted-foreground: 180 5% 72%;
+  --accent: 210 41% 18%;
+  --accent-foreground: 210 7% 85%;
   --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 132 40% 92%;
-  --border: 168 48% 22%;
-  --input: 168 48% 22%;
-  --ring: 140 28% 48%;
+  --destructive-foreground: 210 7% 85%;
+  --border: 210 29% 32%;
+  --input: 210 29% 32%;
+  --ring: 210 41% 18%;
   --radius: 0.5rem;
 
-  --primary-color: #235347;
-  --secondary-color: #0B2B26;
-  --text-color: #DAF1DE;
-  --background-color: #051F20;
-  --border-color: #163832;
+  --primary-color: #1A2D42;
+  --secondary-color: #2E4156;
+  --text-color: #D4D8DD;
+  --background-color: #1A2D42;
+  --border-color: #2E4156;
 }
 
 body {
@@ -44,9 +44,9 @@ body {
 
 /* Glassmorphism card effect */
 .glass-card {
-  background: rgba(5, 31, 32, 0.5);
+  background: rgba(26, 45, 66, 0.5);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(212, 216, 221, 0.1);
 }
 
 input,
@@ -104,17 +104,17 @@ input::placeholder {
 /* Loading animation for hero background */
 #hero-background:not([style*="background-image"]) {
   background: linear-gradient(45deg,
-      #0B2B26 25%,
+      #2E4156 25%,
       transparent 25%,
       transparent 75%,
-      #0B2B26 75%,
-      #0B2B26),
+      #2E4156 75%,
+      #2E4156),
     linear-gradient(45deg,
-      #0B2B26 25%,
+      #2E4156 25%,
       transparent 25%,
       transparent 75%,
-      #0B2B26 75%,
-      #0B2B26);
+      #2E4156 75%,
+      #2E4156);
   background-size: 30px 30px;
   background-position: 0 0, 15px 15px;
   animation: hero-loading 1s linear infinite;

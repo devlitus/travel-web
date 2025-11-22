@@ -3,6 +3,7 @@ import "../styles/global.css";
 import favicon from "../assets/favicon.svg";
 import Header from "../components/Header/Header.astro";
 import SEO from "../components/SEO/SEO.astro";
+import Toaster from "../components/Toast/Toaster.astro";
 
 export interface Props {
   title?: string;
@@ -51,5 +52,6 @@ const {
     <main>
       <slot />
     </main>
+    <Toaster />
   </body>
 </html>

@@ -134,14 +134,22 @@ const formFields = [
     const completeFormData = formHandler.getFormData();
     const destination = completeFormData.destination as string;
 
+    // Validación de destino
     if (!destination) {
-      alert("Por favor, ingresa un destino.");
+      (window as any).toast.warning(
+        "Destino requerido",
+        "Por favor, ingresa un destino antes de continuar."
+      );
       return;
     }
 
     // Verificar cache
     const cachedResult = searchHandler.checkCache(completeFormData);
     if (cachedResult) {
+      (window as any).toast.info(
+        "Usando itinerario guardado",
+        "Encontramos un itinerario previo para este destino."
+      );
       const redirectUrl = searchHandler.buildRedirectUrl(
         destination,
         completeFormData,
@@ -156,27 +164,58 @@ const formFields = [
       'button[type="submit"]'
     ) as HTMLButtonElement;
     const originalText = submitBtn?.textContent || "Crear Itinerario";
+
+    let loadingToastId: number | undefined;
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.textContent = "Generando itinerario...";
+      loadingToastId = (window as any).toast.loading(
+        "Creando tu itinerario personalizado..."
+      );
     }
 
     try {
-      const success = await searchHandler.submitSearch(completeFormData);
+      const result = await searchHandler.submitSearch(completeFormData);
 
-      if (success) {
+      // Cerrar toast de loading
+      if (loadingToastId !== undefined) {
+        (window as any).toast.dismiss(loadingToastId);
+      }
+
+      if (result.success) {
+        (window as any).toast.success(
+          "¡Itinerario creado!",
+          "Redirigiendo a tu aventura..."
+        );
+
         const redirectUrl = searchHandler.buildRedirectUrl(
           destination,
           completeFormData,
           completeFormData.activities || []
         );
-        window.location.href = redirectUrl;
+
+        // Pequeño delay para que se vea el toast de éxito
+        setTimeout(() => {
+          window.location.href = redirectUrl;
+        }, 800);
       } else {
-        alert("Error al generar el itinerario. Por favor, inténtalo de nuevo.");
+        // Mostrar error específico de la API
+        (window as any).toast.error(
+          result.error?.message || "Error al generar itinerario",
+          result.error?.description
+        );
       }
     } catch (error) {
-      console.error("Error:", error);
-      alert("Error de conexión. Por favor, verifica tu conexión a internet.");
+      // Cerrar toast de loading si existe
+      if (loadingToastId !== undefined) {
+        (window as any).toast.dismiss(loadingToastId);
+      }
+
+      console.error("Error inesperado:", error);
+      (window as any).toast.error(
+        "Error inesperado",
+        "Ha ocurrido un error. Por favor, intenta de nuevo."
+      );
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
