@@ -122,28 +122,41 @@ const structuredData = {
       if (!itinerary) throw new Error("No se recibió un itinerario válido.");
 
       const dailyPlanHtml = itinerary.daily_plan
-        .map(
-          (day) => `
+        ? itinerary.daily_plan
+            .map(
+              (day) => `
             <div class="day-plan">
               <h3 class="text-2xl font-semibold mb-3 day-title">Día ${day.day}: ${day.title}</h3>
               <div class="activities-grid">
-                ${day.activities
-                  .map(
-                    (activity) => `
+                ${
+                  day.activities
+                    ? day.activities
+                        .map(
+                          (activity) => `
                       <div class="activity-card">
                         <h4 class="font-bold text-lg">${activity.time_of_day}</h4>
                         <p class="text-gray-300">${activity.description}</p>
                       </div>`
-                  )
-                  .join("")}
+                        )
+                        .join("")
+                    : ""
+                }
               </div>
             </div>`
-        )
-        .join("");
+            )
+            .join("")
+        : "<p>No hay plan diario disponible.</p>";
 
-      const travelTipsHtml = itinerary.travel_tips
-        .map((tip) => `<li>${tip}</li>`)
-        .join("");
+      const travelTipsHtml = itinerary.essential_travel_tips
+        ? itinerary.essential_travel_tips
+            .map(
+              (tip) => `
+          <li>
+            <strong>${tip.category}:</strong> ${tip.tip}
+          </li>`
+            )
+            .join("")
+        : "<li>No hay consejos disponibles en este momento.</li>";
 
       container.innerHTML = `
         <header class="itinerary-header text-center mb-12">
@@ -162,39 +175,47 @@ const structuredData = {
 
         <div class="grid md:grid-cols-3 gap-8 mb-12">
             <div class="info-card"><h2 class="text-xl font-bold mb-2">Duración</h2><p>${
-              itinerary.duration_days
+              itinerary.duration_days || "N/A"
             } días</p></div>
             <div class="info-card"><h2 class="text-xl font-bold mb-2">Alojamiento Sugerido</h2><p>${
-              itinerary.suggested_accommodation.type
-            } - ${
-              itinerary.suggested_accommodation.name
-            }</p><p class="text-sm text-gray-400">${
-              itinerary.suggested_accommodation.estimated_cost_range
-            }</p></div>
+              itinerary.suggested_accommodation?.type || "N/A"
+            }${
+              itinerary.suggested_accommodation?.name
+                ? ` - ${itinerary.suggested_accommodation.name}`
+                : ""
+            }</p>${
+              itinerary.suggested_accommodation?.estimated_cost_range
+                ? `<p class="text-sm text-gray-400">${itinerary.suggested_accommodation.estimated_cost_range}</p>`
+                : ""
+            }</div>
             <div class="info-card"><h2 class="text-xl font-bold mb-2">Costo Total Estimado</h2><p>${
-              itinerary.budget_overview.total_estimated_cost
+              itinerary.budget_overview?.total_estimated_cost || "N/A"
             }</p></div>
         </div>
         
         <section id="daily-plan"><h2 class="section-title">Plan Diario</h2>${dailyPlanHtml}</section>
         
-        <section id="budget" class="mt-12">
+        ${
+          itinerary.budget_overview
+            ? `<section id="budget" class="mt-12">
             <h2 class="section-title">Resumen del Presupuesto</h2>
             <div class="budget-grid">
                 <div class="info-card"><strong>Alojamiento:</strong> ${
-                  itinerary.budget_overview.accommodation
+                  itinerary.budget_overview.accommodation || "N/A"
                 }</div>
                 <div class="info-card"><strong>Comida:</strong> ${
-                  itinerary.budget_overview.food
+                  itinerary.budget_overview.food || "N/A"
                 }</div>
                 <div class="info-card"><strong>Actividades:</strong> ${
-                  itinerary.budget_overview.activities
+                  itinerary.budget_overview.activities || "N/A"
                 }</div>
                 <div class="info-card"><strong>Transporte:</strong> ${
-                  itinerary.budget_overview.transportation
+                  itinerary.budget_overview.transportation || "N/A"
                 }</div>
             </div>
-        </section>
+        </section>`
+            : ""
+        }
 
         <section id="tips" class="mt-12">
             <h2 class="section-title">Consejos de Viaje</h2>
