@@ -52,7 +52,7 @@ export class ApiError extends AppError {
 }
 
 /**
- * Error de servicio externo (Gemini, Unsplash, etc.)
+ * Error de servicio externo (Groq, Unsplash, etc.)
  * Usado cuando falla la comunicación con APIs externas
  */
 export class ExternalServiceError extends AppError {

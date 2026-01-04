@@ -1,6 +1,7 @@
 export const prerender = false;
 import type { APIRoute } from "astro";
-import { GoogleGenAI } from "@google/genai";
+import { createGroq } from "@ai-sdk/groq";
+import { generateText } from "ai";
 import { transformMarkdownToJson } from "../../utils/transformMarkdownToJson";
 import {
   travelCache,
@@ -15,11 +16,20 @@ import {
   validateApiKeys,
   handleExternalService,
 } from "../../utils/errorHandler";
-import {
-  ApiError,
-  ParseError,
-  InvalidResponseError,
-} from "../../utils/errors";
+import { ParseError, InvalidResponseError } from "../../utils/errors";
+
+// Configurar Groq con la API key desde Astro env
+const apiKey: string | undefined = import.meta.env.GROQ_API_KEY;
+
+if (!apiKey) {
+  console.error(
+    "⚠️ GROQ_API_KEY no está configurada en las variables de entorno"
+  );
+}
+
+const groq = createGroq({
+  apiKey: apiKey,
+});
 
 const travelSchema = z.object({
   destination: z.string().min(1, "El destino es requerido"),
@@ -33,9 +43,13 @@ const travelSchema = z.object({
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    // Validar que la API key esté configurada
-    const GEMINI_API_KEY = import.meta.env.GEMINI_API_KEY;
-    validateApiKeys({ GEMINI_API_KEY });
+    // Debug en desarrollo
+    if (import.meta.env.DEV) {
+      console.log(
+        "🔑 GROQ_API_KEY:",
+        apiKey ? "✓ Configurada" : "✗ No encontrada"
+      );
+    }
 
     const data = await request.json();
     const validatedData = travelSchema.parse(data);
@@ -69,31 +83,28 @@ export const POST: APIRoute = async ({ request }) => {
     const query = `
      Busca ${destination} en ${budget} ${duration} ${travelStyle} ${accommodation} ${season} ${activities}
     `;
-    if (!query) {
-      throw new ApiError("El parámetro query es requerido", 400);
-    }
 
-    // Llamar a Gemini AI con manejo de errores
-    const text = await handleExternalService('Gemini AI', async () => {
-      const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
-      const model = "gemini-2.0-flash";
-      const systemInstruction = getTravelSystemInstruction(query);
+    // Llamar a Groq AI con manejo de errores
+    const text = await handleExternalService("Groq AI", async () => {
+      const systemInstruction = getTravelSystemInstruction();
 
-      const response = await ai.models.generateContent({
-        model: model,
-        contents: systemInstruction + "\n\n" + query,
-        config: {
-          temperature: 0.1,
-          maxOutputTokens: 8192, // Aumentado para itinerarios largos
-          candidateCount: 1,
-        },
+      // Generar texto con Groq AI
+      const { text: responseText } = await generateText({
+        model: groq("openai/gpt-oss-120b"),
+        system: systemInstruction,
+        prompt: query,
+        temperature: 0.1,
+        maxOutputTokens: 8192, // Aumentado para itinerarios largos
       });
 
-      if (!response.text) {
-        throw new InvalidResponseError('Gemini AI', 'No se recibió respuesta válida');
+      if (!responseText) {
+        throw new InvalidResponseError(
+          "Groq AI",
+          "No se recibió respuesta válida"
+        );
       }
 
-      return response.text;
+      return responseText;
     });
 
     // Limpiar cualquier texto no deseado de la respuesta
@@ -114,7 +125,10 @@ export const POST: APIRoute = async ({ request }) => {
       console.error("Error parseando JSON:", error.message);
       console.error("Longitud de respuesta:", cleanedText.length, "caracteres");
       console.error("Primeros 200 caracteres:", cleanedText.substring(0, 200));
-      console.error("Últimos 200 caracteres:", cleanedText.substring(cleanedText.length - 200));
+      console.error(
+        "Últimos 200 caracteres:",
+        cleanedText.substring(cleanedText.length - 200)
+      );
 
       throw new ParseError(
         error.message || "Error procesando respuesta de IA",
@@ -136,21 +150,21 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Validar campos obligatorios
     const requiredFields = [
-      'destination_name',
-      'country',
-      'duration_days',
-      'daily_plan',
-      'budget_overview',
-      'essential_travel_tips'
+      "destination_name",
+      "country",
+      "duration_days",
+      "daily_plan",
+      "budget_overview",
+      "essential_travel_tips",
     ];
 
-    const missingFields = requiredFields.filter(field => !itinerary[field]);
+    const missingFields = requiredFields.filter((field) => !itinerary[field]);
     if (missingFields.length > 0) {
       throw new ParseError(
-        `Respuesta de IA incompleta. Faltan campos obligatorios: ${missingFields.join(', ')}`,
+        `Respuesta de IA incompleta. Faltan campos obligatorios: ${missingFields.join(", ")}`,
         JSON.stringify({
           received: Object.keys(itinerary),
-          missing: missingFields
+          missing: missingFields,
         })
       );
     }
@@ -158,9 +172,13 @@ export const POST: APIRoute = async ({ request }) => {
     // Validar que daily_plan tenga actividades
     if (Array.isArray(itinerary.daily_plan)) {
       for (const day of itinerary.daily_plan) {
-        if (!day.activities || !Array.isArray(day.activities) || day.activities.length === 0) {
+        if (
+          !day.activities ||
+          !Array.isArray(day.activities) ||
+          day.activities.length === 0
+        ) {
           throw new ParseError(
-            `El día ${day.day || 'desconocido'} no tiene actividades definidas`,
+            `El día ${day.day || "desconocido"} no tiene actividades definidas`,
             JSON.stringify(day)
           );
         }
@@ -168,11 +186,22 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Validar budget_overview
-    const budgetFields = ['accommodation', 'food', 'activities', 'transportation', 'total_estimated_cost'];
+    const budgetFields = [
+      "accommodation",
+      "food",
+      "activities",
+      "transportation",
+      "total_estimated_cost",
+    ];
     if (itinerary.budget_overview) {
-      const missingBudgetFields = budgetFields.filter(field => !itinerary.budget_overview[field]);
+      const missingBudgetFields = budgetFields.filter(
+        (field) => !itinerary.budget_overview[field]
+      );
       if (missingBudgetFields.length > 0) {
-        console.warn('Campos faltantes en budget_overview:', missingBudgetFields);
+        console.warn(
+          "Campos faltantes en budget_overview:",
+          missingBudgetFields
+        );
       }
     }
 
@@ -193,7 +222,7 @@ export const POST: APIRoute = async ({ request }) => {
     });
   } catch (error) {
     return handleApiError(error, {
-      endpoint: '/api/search',
+      endpoint: "/api/search",
       params: { destination: request.url },
     });
   }
