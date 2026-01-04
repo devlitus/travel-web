@@ -57,16 +57,17 @@ Ayudo a escribir commits siguiendo estándares Conventional Commits.
 ✅ Body explica CÓMO y POR QUÉ  
 ✅ Cambios atómicos y relacionados  
 ✅ Referencias a issues (Fixes #123)  
-✅ Código en inglés  
+✅ Código en inglés
 
 ❌ Múltiples features en un commit  
 ❌ Secretos o credentials  
 ❌ Commits > 300 líneas  
-❌ Mensajes genéricos  
+❌ Mensajes genéricos
 
 ## Ejemplos
 
 ### Feature
+
 ```
 feat(groq): Add Groq API configuration
 
@@ -78,6 +79,7 @@ Fixes #18
 ```
 
 ### Fix
+
 ```
 fix(search): Resolve API timeout in SSR
 
@@ -88,6 +90,7 @@ Fixes #22
 ```
 
 ### Test
+
 ```
 test(groq): Add API key configuration tests
 
@@ -101,4 +104,3 @@ Fixes #25
 ---
 
 **Más información**: Ver [commit.instructions.md](commit.instructions.md) para la guía completa.
-
