@@ -9,12 +9,14 @@ Common issues and solutions when deploying Travel Web to Vercel.
 **Error**: Build failed after 60 seconds
 
 **Causes**:
+
 - Large dependencies taking too long to install
 - Network issues during build
 - Complex build process
 - Insufficient build resources
 
 **Solutions**:
+
 ```bash
 # 1. Check build time locally
 npm run build
@@ -33,6 +35,7 @@ npm uninstall unused-package
 ```
 
 **In vercel.json**:
+
 ```json
 {
   "buildCommand": "npm ci && npm run build",
@@ -47,12 +50,15 @@ npm uninstall unused-package
 **Error**: `npm: command not found` or `npm: not found`
 
 **Causes**:
+
 - Node/npm not installed
 - Node version mismatch
 - PATH not set correctly
 
 **Solutions**:
+
 1. Specify Node version in `vercel.json`:
+
 ```json
 {
   "nodeVersion": "18.x"
@@ -60,6 +66,7 @@ npm uninstall unused-package
 ```
 
 2. Or in `package.json`:
+
 ```json
 {
   "engines": {
@@ -73,11 +80,13 @@ npm uninstall unused-package
 **Error**: `dist directory not found`
 
 **Causes**:
+
 - Build command not running
 - Output directory name mismatch
 - Build failed silently
 
 **Solutions**:
+
 ```json
 {
   "buildCommand": "npm run build",
@@ -86,6 +95,7 @@ npm uninstall unused-package
 ```
 
 Verify Astro build output:
+
 ```bash
 # Check astro.config.mjs
 # Should have: outDir: "dist" (default)
@@ -99,6 +109,7 @@ npm run build && ls -la dist/
 **Error**: `GROQ_API_KEY is undefined` on production
 
 **Causes**:
+
 - Variable not set in Vercel
 - Variable name mismatch
 - Using wrong access pattern
@@ -112,6 +123,7 @@ npm run build && ls -la dist/
    - Check value is not empty
 
 2. **Redeploy after adding variable**:
+
    ```bash
    # Variables don't auto-reload
    # Must redeploy or trigger new build
@@ -121,6 +133,7 @@ npm run build && ls -la dist/
    ```
 
 3. **Use correct access method**:
+
    ```typescript
    // ✅ Correct - SSR only
    const key = process.env.GROQ_API_KEY;
@@ -144,12 +157,14 @@ npm run build && ls -la dist/
 **Problem**: Dev keys working locally, production keys failing
 
 **Causes**:
+
 - Different key formats
 - Production key not activated
 - Rate limits different
 - Permissions differ
 
 **Solutions**:
+
 ```bash
 # Check dev value works
 GROQ_API_KEY=dev_key npm run build
@@ -170,6 +185,7 @@ git push origin main
 **Error**: GET /api/search returns 404
 
 **Causes**:
+
 - API route file missing
 - Wrong file extension (.js vs .ts)
 - Not in `src/pages/api/` directory
@@ -178,12 +194,14 @@ git push origin main
 **Solutions**:
 
 1. **Verify file exists**:
+
    ```bash
    ls -la src/pages/api/
    # Should see search.ts or search.js
    ```
 
 2. **Verify exports**:
+
    ```typescript
    // src/pages/api/search.ts
    export async function POST({ request }) {
@@ -203,6 +221,7 @@ git push origin main
 **Error**: Request to /api/search times out or returns 500
 
 **Causes**:
+
 - Groq API slow
 - Rate limit hit
 - Missing environment variable
@@ -211,19 +230,22 @@ git push origin main
 **Solutions**:
 
 1. **Check logs**:
+
    ```bash
    vercel logs --follow
    ```
 
 2. **Verify environment variable loaded**:
+
    ```typescript
    export async function POST({ request }) {
-     console.log('GROQ_API_KEY exists:', !!process.env.GROQ_API_KEY);
+     console.log("GROQ_API_KEY exists:", !!process.env.GROQ_API_KEY);
      // Should log true
    }
    ```
 
 3. **Test Groq API directly**:
+
    ```bash
    curl -X POST https://api.groq.com/openai/v1/chat/completions \
      -H "Authorization: Bearer YOUR_KEY" \
@@ -248,6 +270,7 @@ git push origin main
 **Error**: Images show broken icon, 404 in network tab
 
 **Causes**:
+
 - Assets not in `/public` directory
 - Asset paths incorrect
 - Missing domain whitelist
@@ -255,12 +278,14 @@ git push origin main
 **Solutions**:
 
 1. **Check asset location**:
+
    ```bash
    ls public/
    # Images should be here
    ```
 
 2. **Fix asset paths in HTML**:
+
    ```astro
    <!-- ✅ Correct -->
    <img src="/images/destination.jpg" alt="Destination" />
@@ -282,6 +307,7 @@ git push origin main
 **Error**: Unsplash images 403 Forbidden or 429 Rate Limit
 
 **Causes**:
+
 - API key invalid or revoked
 - Rate limit exceeded
 - Key permissions insufficient
@@ -293,6 +319,7 @@ git push origin main
    - Check app exists and key matches
 
 2. **Check rate limit**:
+
    ```bash
    # Unsplash allows 50 requests/hour free tier
    # Increase if needed in dashboard
@@ -308,6 +335,7 @@ git push origin main
 **Error**: Page loads but unstyled, no interactivity
 
 **Causes**:
+
 - Build not including CSS/JS
 - Asset paths incorrect
 - Output directory mismatch
@@ -315,6 +343,7 @@ git push origin main
 **Solutions**:
 
 1. **Check build output**:
+
    ```bash
    npm run build
    ls -la dist/
@@ -322,6 +351,7 @@ git push origin main
    ```
 
 2. **Verify output directory**:
+
    ```json
    {
      "outputDirectory": "dist"
@@ -331,7 +361,7 @@ git push origin main
 3. **Check astro.config.mjs**:
    ```javascript
    export default defineConfig({
-     outDir: new URL('./dist', import.meta.url),
+     outDir: new URL("./dist", import.meta.url),
    });
    ```
 
@@ -360,6 +390,7 @@ git push origin main
    - Check Groq dashboard
 
 **Solutions**:
+
 - Optimize images
 - Enable caching
 - Reduce JavaScript
@@ -370,6 +401,7 @@ git push origin main
 **Error**: Function execution timeout due to memory
 
 **Solutions** in `vercel.json`:
+
 ```json
 {
   "functions": {
@@ -413,24 +445,26 @@ npm run preview
 ### Enable Debug Logging
 
 Add to code temporarily:
+
 ```typescript
 export async function POST({ request }) {
-  console.log('Starting search...');
-  console.log('Environment check:', {
+  console.log("Starting search...");
+  console.log("Environment check:", {
     hasKey: !!process.env.GROQ_API_KEY,
-    hasUnsplash: !!process.env.UNSPLASH_ACCESS_KEY
+    hasUnsplash: !!process.env.UNSPLASH_ACCESS_KEY,
   });
-  
+
   try {
     // ... main code
   } catch (error) {
-    console.error('Error details:', error);
+    console.error("Error details:", error);
     throw error;
   }
 }
 ```
 
 Check logs:
+
 ```bash
 vercel logs --follow
 # Trigger request to see logs

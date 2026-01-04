@@ -5,7 +5,9 @@ Complete skill for deploying Travel Web to Vercel with all necessary documentati
 ## Skill Contents
 
 ### SKILL.md
+
 Main instructions file containing:
+
 - When to use this skill
 - Pre-deployment checklist
 - Step-by-step deployment guide
@@ -14,11 +16,13 @@ Main instructions file containing:
 - Performance optimization
 
 ### Configuration & Setup
+
 - **vercel.json** - Deployment configuration template
 - **environment-setup.md** - Complete guide for environment variables
 - **deployment-checklist.md** - Printable pre-deployment verification checklist
 
 ### Troubleshooting
+
 - **troubleshooting.md** - Comprehensive troubleshooting guide with:
   - Build issues and solutions
   - Environment variable problems
@@ -51,6 +55,7 @@ Main instructions file containing:
 ## Key Topics Covered
 
 ### Deployment Process
+
 - Local verification
 - Environment configuration
 - Deployment execution
@@ -58,12 +63,14 @@ Main instructions file containing:
 - Monitoring and logs
 
 ### Configuration
+
 - Build settings
 - Environment variables
 - Function configuration
 - Git integration
 
 ### Troubleshooting
+
 - Build failures
 - Environment variable issues
 - API endpoint problems
@@ -71,6 +78,7 @@ Main instructions file containing:
 - Performance issues
 
 ### Security
+
 - Key rotation
 - Secret management
 - Best practices
@@ -79,6 +87,7 @@ Main instructions file containing:
 ## Integration with Travel Web
 
 This skill is tailored for:
+
 - **Framework**: Astro 5.x
 - **Deployment**: Vercel
 - **APIs**: Groq AI, Unsplash
@@ -87,6 +96,7 @@ This skill is tailored for:
 ## When to Use
 
 ✅ Use this skill when you need to:
+
 - Deploy Travel Web to Vercel
 - Configure environment variables
 - Troubleshoot deployment failures

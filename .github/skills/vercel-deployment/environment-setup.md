@@ -7,6 +7,7 @@ Complete guide for configuring environment variables for Vercel deployment.
 ### API Keys
 
 #### GROQ_API_KEY
+
 - **What**: API key for Groq AI service
 - **Where to get**: https://console.groq.com
 - **Scope**: Required for search/itinerary generation
@@ -15,6 +16,7 @@ Complete guide for configuring environment variables for Vercel deployment.
 - **Format**: `gsk_XXXXXXXXXXXXXXXXXXXXXX`
 
 #### UNSPLASH_ACCESS_KEY
+
 - **What**: API key for Unsplash image service
 - **Where to get**: https://unsplash.com/oauth/applications
 - **Scope**: Required for destination images
@@ -48,7 +50,8 @@ GROQ_API_KEY=your_groq_key_here
 UNSPLASH_ACCESS_KEY=your_unsplash_key_here
 ```
 
-**Important**: 
+**Important**:
+
 - Never commit `.env.local`
 - Add to `.gitignore` (should already be there)
 - Use dev keys that are non-production
@@ -91,18 +94,21 @@ npm run build
 ## Environment-Specific Values
 
 ### Development
+
 ```env
 GROQ_API_KEY=gsk_dev_XXXXXXX (dev key with lower rate limits)
 UNSPLASH_ACCESS_KEY=demo_or_personal_key
 ```
 
 ### Preview (Staging)
+
 ```env
 GROQ_API_KEY=gsk_staging_XXXXXXX (staging key)
 UNSPLASH_ACCESS_KEY=staging_app_key
 ```
 
 ### Production
+
 ```env
 GROQ_API_KEY=gsk_prod_XXXXXXX (production key with high limits)
 UNSPLASH_ACCESS_KEY=production_app_key
@@ -110,7 +116,7 @@ UNSPLASH_ACCESS_KEY=production_app_key
 
 ## Accessing Variables in Code
 
-### In SSR Routes (src/pages/api/*)
+### In SSR Routes (src/pages/api/\*)
 
 ```typescript
 // Use process.env (server-side only)
@@ -132,10 +138,10 @@ export async function POST({ request }) {
 const key = import.meta.env.PUBLIC_GROQ_API_KEY;
 
 // ❌ DON'T DO THIS (browser can see it)
-fetch('/api/search', {
+fetch("/api/search", {
   body: JSON.stringify({
     apiKey: import.meta.env.GROQ_API_KEY, // WRONG!
-  })
+  }),
 });
 ```
 
@@ -144,6 +150,7 @@ fetch('/api/search', {
 ### "GROQ_API_KEY is undefined"
 
 **Solutions**:
+
 1. Verify variable set in Vercel: Settings → Environment Variables
 2. Check variable name matches: `GROQ_API_KEY` (case-sensitive)
 3. Redeploy after adding variable
@@ -153,6 +160,7 @@ fetch('/api/search', {
 ### "Rate limit exceeded"
 
 **Solutions**:
+
 1. Verify you're using production key, not dev key
 2. Check Groq console for rate limit settings
 3. Add caching to reduce API calls
@@ -161,6 +169,7 @@ fetch('/api/search', {
 ### "Unsplash images not loading"
 
 **Solutions**:
+
 1. Verify `UNSPLASH_ACCESS_KEY` is set
 2. Check key is valid and not revoked
 3. Verify rate limits not exceeded
@@ -169,6 +178,7 @@ fetch('/api/search', {
 ### "Works locally, fails on production"
 
 **Solutions**:
+
 1. Verify environment variables in production ≠ development
 2. Check production keys have correct permissions
 3. Verify no typos in variable names
@@ -177,6 +187,7 @@ fetch('/api/search', {
 ## Security Best Practices
 
 ### DO ✅
+
 - ✅ Keep keys in environment variables only
 - ✅ Use strong, unique keys for production
 - ✅ Rotate keys regularly
@@ -186,6 +197,7 @@ fetch('/api/search', {
 - ✅ Use server-side routes for API calls
 
 ### DON'T ❌
+
 - ❌ Commit keys to git
 - ❌ Share keys in messages/email
 - ❌ Use same key across environments
