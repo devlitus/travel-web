@@ -1,116 +1,72 @@
 ---
 name: commit
-description: Guía optimizada de commits siguiendo Conventional Commits
+description: Prompt para escribir commits siguiendo Conventional Commits
 agent: agent
-model: Claude Haiku 4.5 (copilot)
-argument-hint: Describe tus cambios, valida o genera commits
+argument-hint: Describe tus cambios, valida o genera un commit
 ---
 
-# Commits - Travel Web
+# Commit Assistant
 
-**Formato**: `<type>(<scope>): <subject>`
+Ayudo a escribir commits siguiendo estándares Conventional Commits.
 
-## Tipos
+## Qué Puedo Hacer
 
-| Tipo     | Uso                          |
-| -------- | ---------------------------- |
-| feat     | Nueva característica         |
-| fix      | Corrección de bugs           |
-| docs     | Documentación                |
-| test     | Tests                        |
-| refactor | Reorganización de código     |
-| perf     | Mejoras de rendimiento       |
-| style    | Formato (sin lógica)         |
-| chore    | Dependencias y mantenimiento |
-| ci       | CI/CD                        |
+- ✅ Ayudarte a escribir un commit message para tus cambios
+- ✅ Validar si tu commit message es correcto
+- ✅ Generar commits automáticamente desde tu descripción
+- ✅ Responder preguntas sobre convenciones
 
-## Scopes
+## Cómo Usarme
 
-agents • hooks • groq • search • cache • errors • forms • ui • docs • config
-
-## Subject (≤50 caracteres)
-
-- Imperativo: Add, Fix, Update, Remove (no "Added", "Fixed")
-- Minúsculas (excepto nombres propios)
-- Sin punto final
-- Describe QUÉ cambió
+### Escribir un Commit
 
 ```
-✅ feat(search): Add destination filtering system
-❌ added destination filtering.
+/commit I implemented a new search filter feature with tests and documentation
 ```
 
-## Body (Opcional, ≤72 caracteres/línea)
-
-- Separado del subject por línea vacía
-- Explica CÓMO y POR QUÉ
-- Usa bullet points para cambios principales
+### Validar un Commit
 
 ```
-feat(agents): Implement specialized agent system
-
-- Add Planner, Implementer, Reviewer, TestPlanner agents
-- Include seamless handoff system
-- Save agents in .claude/agents/
-
-Fixes #15
+/commit Is this correct? "fix: Fixed the API timeout bug"
 ```
 
-## Reglas Clave
-
-**✅ SIEMPRE**
-
-- Un commit = una feature o fix lógico
-- Commits atómicos (revertibles)
-- Incluir tests y docs con features
-- Referenciar issues: `Fixes #123`
-- Código en inglés
-
-**❌ NUNCA**
-
-- Múltiples features en un commit
-- Mensajes genéricos ("fix stuff")
-- Exponer secretos (API keys, tokens)
-- Commits >300 líneas
-
-## Validación Rápida
-
-- [ ] Formato: `<type>(<scope>): <subject>`
-- [ ] Type válido (feat, fix, docs, test, etc.)
-- [ ] Scope de la lista
-- [ ] Subject ≤50 caracteres
-- [ ] Body explica QUÉ y POR QUÉ
-- [ ] Sin secretos
-- [ ] Cambios relacionados
-
-## Usar en VS Code
+### Generar un Commit
 
 ```
-/commit Help me write a commit for the new search feature
-/commit Validate: "fix: Fixed bugs"
-/commit Generate a commit for Groq API implementation
+/commit Generate a commit message for implementing Groq API with error handling and tests
 ```
 
-## Herramientas Rápidas
+## Formato que Sigo
 
-```bash
-# Verificar cambios
-git diff
-
-# Hacer commit interactivo
-git commit
-
-# Corregir último commit
-git commit --amend --no-edit
-
-# Ver último commit
-git show
 ```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+**Tipos**: feat, fix, docs, test, refactor, perf, style, chore, ci
+
+**Scopes**: agents, hooks, groq, search, cache, errors, forms, ui, docs, config
+
+## Reglas Que Valido
+
+✅ Subject ≤ 50 caracteres  
+✅ Modo imperativo (Add, Fix, Update, NO Added, Fixed)  
+✅ Body explica CÓMO y POR QUÉ  
+✅ Cambios atómicos y relacionados  
+✅ Referencias a issues (Fixes #123)  
+✅ Código en inglés  
+
+❌ Múltiples features en un commit  
+❌ Secretos o credentials  
+❌ Commits > 300 líneas  
+❌ Mensajes genéricos  
 
 ## Ejemplos
 
 ### Feature
-
 ```
 feat(groq): Add Groq API configuration
 
@@ -122,23 +78,20 @@ Fixes #18
 ```
 
 ### Fix
-
 ```
 fix(search): Resolve API timeout in SSR
 
 - Use process.env instead of import.meta.env
 - Add proper error handling
-- Include debug logging
 
 Fixes #22
 ```
 
 ### Test
-
 ```
 test(groq): Add API key configuration tests
 
-- Test createGroq with various scenarios
+- Test configuration with various scenarios
 - Test handler validation
 - Include mocks for external modules
 
@@ -147,4 +100,5 @@ Fixes #25
 
 ---
 
-**Referencia**: `<type>(<scope>): <subject>` | Types: feat, fix, docs, test, refactor, perf, style, chore, ci | Scopes: agents, hooks, groq, search, cache, errors, forms, ui, docs, config
+**Más información**: Ver [commit.instructions.md](commit.instructions.md) para la guía completa.
+
