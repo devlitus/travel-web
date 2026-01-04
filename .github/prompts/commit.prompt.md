@@ -1,11 +1,16 @@
 ---
 name: commit
-description: Comprehensive guide for writing feature-based commits following Conventional Commits standards and Travel Web project conventions
+description: Complete guide for writing, validating, and generating feature-based commits following Conventional Commits and Travel Web standards
 agent: agent
-argument-hint: Type a description of your changes or ask for help structuring a commit message
+argument-hint: Describe your changes, ask to validate a commit, or request commit generation
 ---
 
-# 📝 Guía de Commits por Feature - Travel Web
+# 📝 Guía Completa de Commits - Travel Web
+
+Use este prompt para:
+- ✅ **Aprender** las convenciones de commits
+- ✅ **Validar** tus mensajes de commit
+- ✅ **Generar** commits automáticamente
 
 ## Convención de Commits Utilizadas
 
@@ -142,6 +147,89 @@ Fixes #25
 
 ---
 
+## Reglas Importantes para Travel Web
+
+### ✅ SIEMPRE
+
+- ✅ Un commit = Una feature o fix lógicamente completo
+- ✅ Commits atómicos (pueden revertirse sin afectar otros)
+- ✅ Incluir testing y documentación con la feature
+- ✅ Referencia issues con `Fixes #123` si aplica
+- ✅ Escribe en inglés (consistencia con codebase)
+
+### ❌ NUNCA
+
+- ❌ Mezclar varias features en un commit
+- ❌ Commits con mensajes genéricos ("update files", "fix stuff")
+- ❌ Commits sin body cuando la feature es compleja
+- ❌ Exponer secretos (API keys, passwords, tokens)
+- ❌ Commits muy grandes (>300 líneas de código)
+
+---
+
+## 🔍 Validar tu Commit
+
+Antes de hacer push, verifica que tu commit cumpla estos criterios:
+
+### ✅ Format Check
+
+- [ ] Follows format: `<type>(<scope>): <subject>`
+- [ ] Type es uno de: feat, fix, docs, style, refactor, perf, test, chore, ci
+- [ ] Scope es de la lista: agents, hooks, groq, search, cache, errors, forms, ui, docs, config
+- [ ] Subject tiene ≤ 50 caracteres
+- [ ] Subject usa imperativo (Add, Fix, Update, NO Added, Fixed)
+- [ ] Subject sin punto final
+
+### ✅ Content Check
+
+- [ ] Body explica QUÉ y POR QUÉ (no solo QUÉ)
+- [ ] Body con líneas ≤ 72 caracteres
+- [ ] Body separado del subject por línea vacía
+- [ ] Cambios listados con bullet points
+- [ ] Sin mensajes genéricos como "update files"
+
+### ✅ Project Rules Check
+
+- [ ] Un commit = una feature o fix lógico
+- [ ] Sin mezcla de múltiples features
+- [ ] Sin secretos o API keys
+- [ ] Referencias issues si aplica (Fixes #123)
+- [ ] Escrito en inglés
+
+---
+
+## 🔨 Generar un Commit
+
+Si necesitas ayuda para generar un commit, proporciona:
+
+1. **Qué cambió**: Los archivos o features modificados
+2. **Por qué**: La motivación o problema resuelto
+3. **Cómo**: El approach técnico si es relevante
+4. **Relacionado**: GitHub issues (ej: #123)
+
+### Proceso de Generación
+
+1. **Analizar** tu descripción
+2. **Seleccionar** tipo: feat, fix, docs, test, etc.
+3. **Elegir** scope: agents, hooks, groq, search, cache, errors, forms, ui, docs, config
+4. **Estructurar** adecuadamente:
+   - Subject ≤ 50 caracteres
+   - Body con bullet points
+   - Footer con referencias
+5. **Validar** contra estándares Travel Web
+
+### Tips para Mejores Resultados
+
+| Hacer ✅                | Evitar ❌               |
+| ----------------------- | ----------------------- |
+| Ser específico          | Usar términos genéricos |
+| Listar features         | Escribir párrafos       |
+| Mencionar tests         | Olvidar documentación   |
+| Referenciar issues      | Dejar vago              |
+| Usar términos técnicos  | Ser demasiado extenso   |
+
+---
+
 ## Workflow: Cómo Hacer un Commit por Feature
 
 ### 1️⃣ Planificar la Feature
@@ -191,43 +279,6 @@ git show
 
 ---
 
-## Reglas Importantes para Travel Web
-
-### ✅ SIEMPRE
-
-- ✅ Un commit = Una feature o fix lógicamente completo
-- ✅ Commits atómicos (pueden revertirse sin afectar otros)
-- ✅ Incluir testing y documentación con la feature
-- ✅ Referencia issues con `Fixes #123` si aplica
-- ✅ Escribe en inglés (consistencia con codebase)
-
-### ❌ NUNCA
-
-- ❌ Mezclar varias features en un commit
-- ❌ Commits con mensajes genéricos ("update files", "fix stuff")
-- ❌ Commits sin body cuando la feature es compleja
-- ❌ Exponer secretos (API keys, passwords, tokens)
-- ❌ Commits muy grandes (>300 líneas de código)
-
----
-
-## Integración con GitHub
-
-### Commits Automáticos del Sistema
-
-Algunos commits son creados por herramientas:
-
-- **deps**: Actualizaciones automáticas de dependencias
-- **ci**: Cambios en workflows de GitHub Actions
-
-### Pull Request y Commits
-
-1. Cada feature es un **branch separado**
-2. Los commits cuentan la **historia de desarrollo**
-3. Al hacer merge, se preserva el historial
-
----
-
 ## Herramientas Útiles
 
 ### Mensaje de Commit Interactivo
@@ -256,6 +307,36 @@ git commit --amend -m "mensaje corregido"
 ```bash
 # Reorganizar últimos N commits
 git rebase -i HEAD~3
+```
+
+---
+
+## 🚀 Cómo Usar Este Prompt en VS Code
+
+### Obtener Ayuda
+
+```
+/commit I added a new search filter feature, can you help me write a proper commit message?
+```
+
+### Validar tu Mensaje
+
+```
+/commit Is this a good commit message? "fix: Fixed bugs in search"
+```
+
+### Generar un Commit
+
+```
+/commit I implemented the Groq API migration with tests, documentation and configuration changes
+```
+
+### Preguntar sobre Convenciones
+
+```
+/commit What scope should I use for cache-related changes?
+/commit Show me an example of a feat commit
+/commit What are the NEVER rules?
 ```
 
 ---
@@ -297,43 +378,13 @@ R: Para features complejas o fixes delicados, sí. Para cambios triviales, el su
 R: Usa `git commit --amend` para corregir el último commit antes de hacer push.
 
 **P: ¿Cómo escribo commits en español?**
-R: Usa inglés para consistencia con el codebase existente, pero el process es igual.
+R: Usa inglés para consistencia con el codebase existente.
 
----
+**P: ¿Cómo valido si mi commit es bueno?**
+R: Usa `/commit` con tu mensaje para validarlo contra los estándares del proyecto.
 
-## 🚀 Cómo Usar Este Prompt
-
-### En VS Code Chat:
-
-1. **Obtener ayuda para estructurar un commit**:
-   ```
-   /commit I added a new search filter feature, can you help me write a proper commit message?
-   ```
-
-2. **Validar un mensaje de commit**:
-   ```
-   /commit Is this a good commit message? "fix: Fixed bugs"
-   ```
-
-3. **Generar multiple commit messages para un feature**:
-   ```
-   /commit I implemented the Groq API migration with tests, documentation and configuration changes
-   ```
-
-4. **Preguntar sobre convenciones**:
-   ```
-   /commit What scope should I use for cache-related changes?
-   ```
-
-### Comandos Rápidos:
-
-| Tarea | Comando Chat |
-|-------|--------------|
-| Estructurar commit | `/commit describe your changes` |
-| Validar mensaje | `/commit check if my message is good` |
-| Listar tipos | `/commit what are the commit types?` |
-| Obtener ejemplo | `/commit show me an example of a feat commit` |
-| Verificar reglas | `/commit what are the NEVER rules?` |
+**P: ¿Puedo hacer que genere el commit automáticamente?**
+R: Sí, describe tus cambios en `/commit` y pide que lo genere para ti.
 
 ---
 
@@ -346,3 +397,5 @@ R: Usa inglés para consistencia con el codebase existente, pero el process es i
 **Scopes**: agents, hooks, groq, search, cache, errors, forms, ui, docs, config
 
 **Regla de Oro**: Un commit = Una feature o fix lógicamente completo
+
+**Usar este prompt para**: Aprender, validar, y generar commits
