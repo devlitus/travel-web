@@ -1,0 +1,24 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "astro",
+  "nodeVersion": "18.x",
+  "outputDirectory": "dist",
+  "rootDirectory": ".",
+  "env": {
+    "GROQ_API_KEY": "@groq-api-key",
+    "UNSPLASH_ACCESS_KEY": "@unsplash-access-key"
+  },
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  },
+  "functions": {
+    "src/pages/api/**/*.ts": {
+      "maxDuration": 30,
+      "memory": 1024
+    }
+  }
+}
