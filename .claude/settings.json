@@ -1,0 +1,89 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json, sys; data=json.load(sys.stdin); path=data.get('tool_input',{}).get('file_path',''); sensitive=['.env', 'secrets.json', 'package-lock.json', '.git/']; sys.exit(2 if any(s in path for s in sensitive) else 0)\"",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 << 'EOF'\nimport json, sys\ndata = json.load(sys.stdin)\npath = data.get('tool_input', {}).get('file_path', '')\nprotected = ['cache.ts', 'errorHandler.ts', 'errors.ts', 'hooks']\nif any(p in path for p in protected):\n    print('⚠️  ATENCIÓN: Estás modificando archivo crítico de arquitectura. Procede con cuidado.')\nEOF"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file=$(jq -r '.tool_input.file_path' 2>/dev/null); if echo \"$file\" | grep -qE '\\.(ts|tsx|astro)$'; then npx prettier --write \"$file\" 2>/dev/null && echo \"✨ Formateado: $file\" || true; fi",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file=$(jq -r '.tool_input.file_path' 2>/dev/null); base_name=\"${file%.*}\"; test_ts=\"${base_name}.spec.ts\"; test_tsx=\"${base_name}.spec.tsx\"; if [ -f \"$test_ts\" ] || [ -f \"$test_tsx\" ]; then echo \"💡 HINT: Existe test para este archivo. Ejecuta: npm test -- ${base_name}.spec.*\"; fi",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && { [ -d node_modules ] || echo '⚠️  WARNING: node_modules no encontrado. Ejecuta: npm install'; } && { grep -q 'GROQ_API_KEY' .env 2>/dev/null || echo '⚠️  WARNING: GROQ_API_KEY no está configurada en .env'; } && { grep -q 'UNSPLASH_ACCESS_KEY' .env 2>/dev/null || echo '⚠️  WARNING: UNSPLASH_ACCESS_KEY no está configurada en .env'; }",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if grep -iqE '(plan|arquitect|diseñ|arquitectura|revisa|review|test|testing|estrateg)' <<< \"$(cat)\"; then echo '💡 HINT: Considere usar el sistema de agentes definido en .claude/agents/. Lea la sección \"Agent System Architecture\" en CLAUDE.md'; fi",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if grep -iqE '(error|bug|falla|crash|exception|debug|investigar|por.?que.*(falla|no.?funciona)|stack.?trace|undefined|null)' <<< \"$(cat)\"; then echo '🔍 HINT: Para investigar bugs, considera usar el agente Debugger (.claude/agents/debugger.md). Genera reportes detallados en docs/{feature}/debug/'; fi",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Revisa si las tareas han sido completadas correctamente. ¿Hay algo pendiente o incompleto? Responde JSON: {\"should_continue\": true/false, \"reason\": \"explicación breve\"}",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  }
+}
