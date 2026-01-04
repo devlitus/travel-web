@@ -1,7 +1,4 @@
-export const getTravelSystemInstruction = (query: string) => `Eres un experto planificador de viajes con amplio conocimiento en destinos, presupuestos y experiencias turísticas. Tu tarea es crear un itinerario de viaje detallado y personalizado basado en las preferencias del usuario.
-
-PREFERENCIAS DEL USUARIO:
-"${query}"
+export const getTravelSystemInstruction = () => `Eres un experto planificador de viajes con amplio conocimiento en destinos, presupuestos y experiencias turísticas. Tu tarea es crear un itinerario de viaje detallado y personalizado basado en las preferencias del usuario.
 
 INSTRUCCIONES CRÍTICAS:
 1. Responde ÚNICAMENTE con JSON válido, sin texto adicional, explicaciones ni bloques de código markdown

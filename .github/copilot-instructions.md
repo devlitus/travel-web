@@ -8,7 +8,7 @@ Este es un proyecto de aplicación web de viajes construido con **Astro 4.x**, T
 
 - **Framework**: Astro 4.x
 - **Lenguaje**: TypeScript
-- **Estilos**: CSS vanilla (scoped y global)
+- **Estilos**: Tailwind CSS + CSS scoped en componentes
 - **Deployment**: Estático (SSG)
 
 ## Reglas de Codificación
@@ -53,10 +53,13 @@ const { title, optional = false } = Astro.props;
 - **CSS classes**: kebab-case o BEM
 - **Variables**: camelCase en JS/TS, kebab-case en CSS
 
-### 4. Estilos Tailwind CSS
+### 4. Estilos CSS
 
-- Usar Tailwind CSS para estilos globales
-- Clases utilitarias para componentes simples
+- Usar **Tailwind CSS** para estilos utilitarios y layouts
+- Usar **CSS scoped** (`<style>`) para estilos específicos de componentes complejos
+- Archivos CSS separados (`*.css`) solo para componentes con muchos estilos (ej: `TravelForm.css`)
+- Importar archivos CSS con `import "./Componente.css";` en el frontmatter
+- Preferir clases Tailwind sobre CSS custom cuando sea posible
 
 ### 5. TypeScript
 
