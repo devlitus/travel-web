@@ -41,10 +41,6 @@ export default defineConfig({
       cssMinify: true,
       reportCompressedSize: false,
       chunkSizeWarningLimit: 1000
-    },
-    // Cache de dependencias
-    optimizeDeps: {
-      include: ['@google/genai']
     }
   }
 });
