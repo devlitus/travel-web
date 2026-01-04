@@ -121,12 +121,22 @@ const structuredData = {
       const { itinerary } = data;
       if (!itinerary) throw new Error("No se recibió un itinerario válido.");
 
+      const getActivityIcon = (timeOfDay) => {
+        const time = timeOfDay.toLowerCase();
+        if (time.includes('mañana') || time.includes('morning')) return '🌅';
+        if (time.includes('tarde') || time.includes('afternoon')) return '🌞';
+        if (time.includes('noche') || time.includes('evening') || time.includes('night')) return '🌙';
+        if (time.includes('almuerzo') || time.includes('lunch')) return '🍽️';
+        if (time.includes('cena') || time.includes('dinner')) return '🍴';
+        return '⏰';
+      };
+
       const dailyPlanHtml = itinerary.daily_plan
         ? itinerary.daily_plan
             .map(
               (day) => `
             <div class="day-plan">
-              <h3 class="text-2xl font-semibold mb-3 day-title">Día ${day.day}: ${day.title}</h3>
+              <h3 class="day-title">Día ${day.day}: ${day.title}</h3>
               <div class="activities-grid">
                 ${
                   day.activities
@@ -134,8 +144,10 @@ const structuredData = {
                         .map(
                           (activity) => `
                       <div class="activity-card">
-                        <h4 class="font-bold text-lg">${activity.time_of_day}</h4>
-                        <p class="text-gray-300">${activity.description}</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 0.75rem;">
+                          <h4 class="font-bold">${getActivityIcon(activity.time_of_day)} ${activity.time_of_day}</h4>
+                        </div>
+                        <p>${activity.description}</p>
                       </div>`
                         )
                         .join("")
@@ -147,16 +159,32 @@ const structuredData = {
             .join("")
         : "<p>No hay plan diario disponible.</p>";
 
+      const getCategoryIcon = (category) => {
+        const cat = category.toLowerCase();
+        if (cat.includes('moneda') || cat.includes('dinero') || cat.includes('currency') || cat.includes('money')) return '💰';
+        if (cat.includes('seguridad') || cat.includes('safety') || cat.includes('seguro')) return '🔒';
+        if (cat.includes('transporte') || cat.includes('transport') || cat.includes('viaje')) return '🚌';
+        if (cat.includes('salud') || cat.includes('health') || cat.includes('médico')) return '⚕️';
+        if (cat.includes('idioma') || cat.includes('language')) return '🗣️';
+        if (cat.includes('cultura') || cat.includes('culture') || cat.includes('tradición')) return '🎭';
+        if (cat.includes('comida') || cat.includes('food') || cat.includes('gastronomía')) return '🍴';
+        if (cat.includes('clima') || cat.includes('weather') || cat.includes('tiempo')) return '⛅';
+        if (cat.includes('documentos') || cat.includes('documents') || cat.includes('papeles')) return '📄';
+        if (cat.includes('ropa') || cat.includes('clothing') || cat.includes('outfit')) return '👕';
+        return '💡';
+      };
+
       const travelTipsHtml = itinerary.essential_travel_tips
         ? itinerary.essential_travel_tips
             .map(
               (tip) => `
           <li>
-            <strong>${tip.category}:</strong> ${tip.tip}
+            <strong>${getCategoryIcon(tip.category)} ${tip.category}</strong>
+            <span>${tip.tip}</span>
           </li>`
             )
             .join("")
-        : "<li>No hay consejos disponibles en este momento.</li>";
+        : "<li><strong>ℹ️ INFO</strong><span>No hay consejos disponibles en este momento.</span></li>";
 
       container.innerHTML = `
         <header class="itinerary-header text-center mb-12">
@@ -174,23 +202,34 @@ const structuredData = {
         </header>
 
         <div class="grid md:grid-cols-3 gap-8 mb-12">
-            <div class="info-card"><h2 class="text-xl font-bold mb-2">Duración</h2><p>${
-              itinerary.duration_days || "N/A"
-            } días</p></div>
-            <div class="info-card"><h2 class="text-xl font-bold mb-2">Alojamiento Sugerido</h2><p>${
-              itinerary.suggested_accommodation?.type || "N/A"
-            }${
-              itinerary.suggested_accommodation?.name
-                ? ` - ${itinerary.suggested_accommodation.name}`
-                : ""
-            }</p>${
-              itinerary.suggested_accommodation?.estimated_cost_range
-                ? `<p class="text-sm text-gray-400">${itinerary.suggested_accommodation.estimated_cost_range}</p>`
-                : ""
-            }</div>
-            <div class="info-card"><h2 class="text-xl font-bold mb-2">Costo Total Estimado</h2><p>${
-              itinerary.budget_overview?.total_estimated_cost || "N/A"
-            }</p></div>
+            <div class="info-card">
+              <h2>⏱️ Duración</h2>
+              <p style="font-size: 1.75rem; font-weight: 700; color: hsl(var(--foreground));">${
+                itinerary.duration_days || "N/A"
+              }</p>
+              <p style="font-size: 0.9rem; margin-top: 0.25rem;">días</p>
+            </div>
+            <div class="info-card">
+              <h2>🏨 Alojamiento</h2>
+              <p style="font-size: 1.25rem; font-weight: 700; color: hsl(var(--foreground));">${
+                itinerary.suggested_accommodation?.type || "N/A"
+              }${
+                itinerary.suggested_accommodation?.name
+                  ? ` - ${itinerary.suggested_accommodation.name}`
+                  : ""
+              }</p>
+              ${
+                itinerary.suggested_accommodation?.estimated_cost_range
+                  ? `<p style="font-size: 0.9rem; color: hsl(180 5% 72%); margin-top: 0.5rem;">${itinerary.suggested_accommodation.estimated_cost_range}</p>`
+                  : ""
+              }
+            </div>
+            <div class="info-card">
+              <h2>💵 Costo Total</h2>
+              <p style="font-size: 1.75rem; font-weight: 700; color: hsl(var(--foreground));">${
+                itinerary.budget_overview?.total_estimated_cost || "N/A"
+              }</p>
+            </div>
         </div>
         
         <section id="daily-plan"><h2 class="section-title">Plan Diario</h2>${dailyPlanHtml}</section>
@@ -198,20 +237,32 @@ const structuredData = {
         ${
           itinerary.budget_overview
             ? `<section id="budget" class="mt-12">
-            <h2 class="section-title">Resumen del Presupuesto</h2>
+            <h2 class="section-title">Desglose del Presupuesto</h2>
             <div class="budget-grid">
-                <div class="info-card"><strong>Alojamiento:</strong> ${
-                  itinerary.budget_overview.accommodation || "N/A"
-                }</div>
-                <div class="info-card"><strong>Comida:</strong> ${
-                  itinerary.budget_overview.food || "N/A"
-                }</div>
-                <div class="info-card"><strong>Actividades:</strong> ${
-                  itinerary.budget_overview.activities || "N/A"
-                }</div>
-                <div class="info-card"><strong>Transporte:</strong> ${
-                  itinerary.budget_overview.transportation || "N/A"
-                }</div>
+                <div class="info-card">
+                  <h2>🏨 Alojamiento</h2>
+                  <p style="font-size: 1.5rem; font-weight: 700; margin-top: 1rem;">${
+                    itinerary.budget_overview.accommodation || "N/A"
+                  }</p>
+                </div>
+                <div class="info-card">
+                  <h2>🍽️ Comida</h2>
+                  <p style="font-size: 1.5rem; font-weight: 700; margin-top: 1rem;">${
+                    itinerary.budget_overview.food || "N/A"
+                  }</p>
+                </div>
+                <div class="info-card">
+                  <h2>🎯 Actividades</h2>
+                  <p style="font-size: 1.5rem; font-weight: 700; margin-top: 1rem;">${
+                    itinerary.budget_overview.activities || "N/A"
+                  }</p>
+                </div>
+                <div class="info-card">
+                  <h2>🚌 Transporte</h2>
+                  <p style="font-size: 1.5rem; font-weight: 700; margin-top: 1rem;">${
+                    itinerary.budget_overview.transportation || "N/A"
+                  }</p>
+                </div>
             </div>
         </section>`
             : ""
@@ -222,9 +273,9 @@ const structuredData = {
             <ul class="tips-list">${travelTipsHtml}</ul>
         </section>
 
-        <div class="text-center mt-12 mb-8">
-            <a href="/" class="inline-flex items-center px-6 py-3 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg" style="background-color: hsl(var(--primary)); border: 1px solid hsl(var(--border));">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="text-center mt-16 mb-8">
+            <a href="/" class="back-btn" style="background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary))); color: hsl(var(--foreground));">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
                 Planificar otro viaje
