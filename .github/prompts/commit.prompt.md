@@ -1,5 +1,8 @@
 ---
+name: commit
+description: Comprehensive guide for writing feature-based commits following Conventional Commits standards and Travel Web project conventions
 agent: agent
+argument-hint: Type a description of your changes or ask for help structuring a commit message
 ---
 
 # 📝 Guía de Commits por Feature - Travel Web
@@ -9,6 +12,7 @@ agent: agent
 Seguimos la especificación de **Conventional Commits** para mantener un historial claro y estructurado.
 
 ### Formato Base
+
 ```
 <type>(<scope>): <subject>
 
@@ -21,17 +25,17 @@ Seguimos la especificación de **Conventional Commits** para mantener un histori
 
 ## Tipos de Commits (type)
 
-| Tipo | Uso | Ejemplo |
-|------|-----|---------|
-| **feat** | Nueva característica o feature completa | `feat(auth): Add user authentication system` |
-| **fix** | Corrección de bugs | `fix(search): Resolve API timeout issue` |
-| **docs** | Cambios en documentación | `docs(guides): Update setup instructions` |
-| **style** | Formato, espacios, comillas (sin lógica) | `style(components): Format code with Prettier` |
-| **refactor** | Reorganización de código existente | `refactor(utils): Extract cache logic to module` |
-| **perf** | Mejoras de rendimiento | `perf(search): Optimize query caching` |
-| **test** | Agregar o modificar tests | `test(api): Add integration tests for search` |
-| **chore** | Tareas de mantenimiento, dependencias | `chore(deps): Update dependencies` |
-| **ci** | Cambios en CI/CD | `ci(github): Add workflow for automated tests` |
+| Tipo         | Uso                                      | Ejemplo                                          |
+| ------------ | ---------------------------------------- | ------------------------------------------------ |
+| **feat**     | Nueva característica o feature completa  | `feat(auth): Add user authentication system`     |
+| **fix**      | Corrección de bugs                       | `fix(search): Resolve API timeout issue`         |
+| **docs**     | Cambios en documentación                 | `docs(guides): Update setup instructions`        |
+| **style**    | Formato, espacios, comillas (sin lógica) | `style(components): Format code with Prettier`   |
+| **refactor** | Reorganización de código existente       | `refactor(utils): Extract cache logic to module` |
+| **perf**     | Mejoras de rendimiento                   | `perf(search): Optimize query caching`           |
+| **test**     | Agregar o modificar tests                | `test(api): Add integration tests for search`    |
+| **chore**    | Tareas de mantenimiento, dependencias    | `chore(deps): Update dependencies`               |
+| **ci**       | Cambios en CI/CD                         | `ci(github): Add workflow for automated tests`   |
 
 ---
 
@@ -55,6 +59,7 @@ Define el área afectada:
 ## Estructura del Commit
 
 ### Subject (Asunto)
+
 - **Máximo 50 caracteres**
 - **Imperativos**: usa verbos directos (Add, Fix, Update, Remove)
 - **Minúsculas** (excepto nombres propios)
@@ -65,6 +70,7 @@ Define el área afectada:
 ❌ `added groq configuration.`
 
 ### Body (Cuerpo)
+
 - **Máximo 72 caracteres por línea**
 - **Separado del subject por línea vacía**
 - **Explica CÓMO y POR QUÉ cambió (no QUÉ)**
@@ -72,6 +78,7 @@ Define el área afectada:
 - **Incluye contexto importante**
 
 ### Footer (Pie)
+
 - **Para breaking changes**: `BREAKING CHANGE: description`
 - **Para issues relacionados**: `Fixes #123`, `Closes #456`
 - **Para co-autores**: `Co-authored-by: name <email>`
@@ -81,6 +88,7 @@ Define el área afectada:
 ## Ejemplos de Commits Bien Estructurados
 
 ### Ejemplo 1: Feature Completa
+
 ```
 feat(agents): Implement specialized agent system
 
@@ -95,6 +103,7 @@ Refs #15, #22
 ```
 
 ### Ejemplo 2: Bug Fix
+
 ```
 fix(search): Resolve GROQ_API_KEY undefined in development
 
@@ -106,6 +115,7 @@ Fixes #18
 ```
 
 ### Ejemplo 3: Documentation
+
 ```
 docs(groq): Create comprehensive testing plans
 
@@ -118,6 +128,7 @@ Relates to #22
 ```
 
 ### Ejemplo 4: Test Addition
+
 ```
 test(groq): Add unit and integration tests for API key configuration
 
@@ -134,6 +145,7 @@ Fixes #25
 ## Workflow: Cómo Hacer un Commit por Feature
 
 ### 1️⃣ Planificar la Feature
+
 ```bash
 # Identifica los cambios agrupables por característica
 git status
@@ -143,6 +155,7 @@ git diff
 ```
 
 ### 2️⃣ Agrupar Cambios Relacionados
+
 ```bash
 # Agrupa archivos relacionados a una feature
 git add src/pages/api/search.ts src/utils/searchHandler.ts
@@ -152,6 +165,7 @@ git add "src/**/*groq*"
 ```
 
 ### 3️⃣ Escribir el Commit
+
 ```bash
 # Abre editor interactivo para mejor formato
 git commit
@@ -166,6 +180,7 @@ git commit -m "feat(search): Add destination filtering system
 ```
 
 ### 4️⃣ Verificar el Commit
+
 ```bash
 # Revisa que el commit se vea bien
 git log -1 --stat
@@ -179,6 +194,7 @@ git show
 ## Reglas Importantes para Travel Web
 
 ### ✅ SIEMPRE
+
 - ✅ Un commit = Una feature o fix lógicamente completo
 - ✅ Commits atómicos (pueden revertirse sin afectar otros)
 - ✅ Incluir testing y documentación con la feature
@@ -186,6 +202,7 @@ git show
 - ✅ Escribe en inglés (consistencia con codebase)
 
 ### ❌ NUNCA
+
 - ❌ Mezclar varias features en un commit
 - ❌ Commits con mensajes genéricos ("update files", "fix stuff")
 - ❌ Commits sin body cuando la feature es compleja
@@ -197,11 +214,14 @@ git show
 ## Integración con GitHub
 
 ### Commits Automáticos del Sistema
+
 Algunos commits son creados por herramientas:
+
 - **deps**: Actualizaciones automáticas de dependencias
 - **ci**: Cambios en workflows de GitHub Actions
 
 ### Pull Request y Commits
+
 1. Cada feature es un **branch separado**
 2. Los commits cuentan la **historia de desarrollo**
 3. Al hacer merge, se preserva el historial
@@ -211,6 +231,7 @@ Algunos commits son creados por herramientas:
 ## Herramientas Útiles
 
 ### Mensaje de Commit Interactivo
+
 ```bash
 # Git abre tu editor preferido
 git commit
@@ -220,6 +241,7 @@ git commit
 ```
 
 ### Amend (Corregir Último Commit)
+
 ```bash
 # Agregar cambios olvidados
 git add src/nuevo-archivo.ts
@@ -230,6 +252,7 @@ git commit --amend -m "mensaje corregido"
 ```
 
 ### Rebase Interactivo (Reorganizar Commits)
+
 ```bash
 # Reorganizar últimos N commits
 git rebase -i HEAD~3
@@ -252,13 +275,13 @@ git rebase -i HEAD~3
 
 ## Referencias Rápidas
 
-| Tarea | Comando |
-|-------|---------|
-| Ver commits recientes | `git log --oneline -n 10` |
-| Ver detalles de un commit | `git show <hash>` |
+| Tarea                      | Comando                        |
+| -------------------------- | ------------------------------ |
+| Ver commits recientes      | `git log --oneline -n 10`      |
+| Ver detalles de un commit  | `git show <hash>`              |
 | Ver commits de una feature | `git log --grep="feat(scope)"` |
-| Ver cambios no commiteados | `git diff` |
-| Ver cambios staged | `git diff --staged` |
+| Ver cambios no commiteados | `git diff`                     |
+| Ver cambios staged         | `git diff --staged`            |
 
 ---
 
@@ -275,3 +298,51 @@ R: Usa `git commit --amend` para corregir el último commit antes de hacer push.
 
 **P: ¿Cómo escribo commits en español?**
 R: Usa inglés para consistencia con el codebase existente, pero el process es igual.
+
+---
+
+## 🚀 Cómo Usar Este Prompt
+
+### En VS Code Chat:
+
+1. **Obtener ayuda para estructurar un commit**:
+   ```
+   /commit I added a new search filter feature, can you help me write a proper commit message?
+   ```
+
+2. **Validar un mensaje de commit**:
+   ```
+   /commit Is this a good commit message? "fix: Fixed bugs"
+   ```
+
+3. **Generar multiple commit messages para un feature**:
+   ```
+   /commit I implemented the Groq API migration with tests, documentation and configuration changes
+   ```
+
+4. **Preguntar sobre convenciones**:
+   ```
+   /commit What scope should I use for cache-related changes?
+   ```
+
+### Comandos Rápidos:
+
+| Tarea | Comando Chat |
+|-------|--------------|
+| Estructurar commit | `/commit describe your changes` |
+| Validar mensaje | `/commit check if my message is good` |
+| Listar tipos | `/commit what are the commit types?` |
+| Obtener ejemplo | `/commit show me an example of a feat commit` |
+| Verificar reglas | `/commit what are the NEVER rules?` |
+
+---
+
+## 📋 Resumen Rápido
+
+**Estructura**: `<type>(<scope>): <subject>`
+
+**Tipos principales**: feat, fix, docs, test
+
+**Scopes**: agents, hooks, groq, search, cache, errors, forms, ui, docs, config
+
+**Regla de Oro**: Un commit = Una feature o fix lógicamente completo
