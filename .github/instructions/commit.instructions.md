@@ -14,17 +14,17 @@ Guía completa para escribir, validar y generar commits siguiendo Conventional C
 
 ## Tipos de Commits
 
-| Tipo      | Uso                              | Ejemplo                                    |
-| --------- | -------------------------------- | ------------------------------------------ |
-| feat      | Nueva característica             | `feat(search): Add destination filtering`  |
-| fix       | Corrección de bugs               | `fix(api): Resolve timeout in SSR`         |
-| docs      | Documentación                    | `docs(guides): Update setup instructions`  |
-| test      | Tests y cobertura                | `test(groq): Add configuration tests`      |
-| refactor  | Reorganización de código         | `refactor(cache): Extract logic to module` |
-| perf      | Mejoras de rendimiento           | `perf(search): Optimize query caching`     |
-| style     | Formato, espacios, comillas      | `style(components): Format with Prettier`  |
-| chore     | Dependencias y mantenimiento     | `chore(deps): Update packages`             |
-| ci        | Cambios en CI/CD                 | `ci(github): Add automated test workflow`  |
+| Tipo     | Uso                          | Ejemplo                                    |
+| -------- | ---------------------------- | ------------------------------------------ |
+| feat     | Nueva característica         | `feat(search): Add destination filtering`  |
+| fix      | Corrección de bugs           | `fix(api): Resolve timeout in SSR`         |
+| docs     | Documentación                | `docs(guides): Update setup instructions`  |
+| test     | Tests y cobertura            | `test(groq): Add configuration tests`      |
+| refactor | Reorganización de código     | `refactor(cache): Extract logic to module` |
+| perf     | Mejoras de rendimiento       | `perf(search): Optimize query caching`     |
+| style    | Formato, espacios, comillas  | `style(components): Format with Prettier`  |
+| chore    | Dependencias y mantenimiento | `chore(deps): Update packages`             |
+| ci       | Cambios en CI/CD             | `ci(github): Add automated test workflow`  |
 
 ## Scopes - Áreas del Proyecto
 
@@ -44,6 +44,7 @@ Guía completa para escribir, validar y generar commits siguiendo Conventional C
 ### Subject (Asunto)
 
 **Reglas:**
+
 - ≤ 50 caracteres
 - Modo imperativo: Add, Fix, Update, Remove (NO Added, Fixed)
 - Minúsculas (excepto nombres propios)
@@ -51,6 +52,7 @@ Guía completa para escribir, validar y generar commits siguiendo Conventional C
 - Describe QUÉ cambió, no POR QUÉ
 
 **Ejemplos:**
+
 ```
 ✅ feat(groq): Add API key configuration
 ✅ fix(search): Resolve timeout in SSR
@@ -61,6 +63,7 @@ Guía completa para escribir, validar y generar commits siguiendo Conventional C
 ### Body (Cuerpo)
 
 **Reglas:**
+
 - Separado del subject por línea vacía
 - ≤ 72 caracteres por línea
 - Explica CÓMO y POR QUÉ, no QUÉ
@@ -68,6 +71,7 @@ Guía completa para escribir, validar y generar commits siguiendo Conventional C
 - Contexto importante de la implementación
 
 **Ejemplo:**
+
 ```
 feat(agents): Implement specialized agent system
 
@@ -86,11 +90,13 @@ proper separation of concerns and collaborative workflow.
 ### Footer (Pie)
 
 **Tipos:**
+
 - Breaking changes: `BREAKING CHANGE: description`
 - Issues: `Fixes #123`, `Closes #456`, `Relates #789`
 - Co-autores: `Co-authored-by: name <email>`
 
 **Ejemplo:**
+
 ```
 Fixes #18
 Relates #22
