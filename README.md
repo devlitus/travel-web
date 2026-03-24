@@ -1,6 +1,7 @@
 # 🌍 Travel Web - Generador de Itinerarios con IA
 
 <div align="center">
+Una aplicación web moderna construida con **Astro 5.14+** que permite a los usuarios buscar destinos de viaje y generar itinerarios personalizados basados en sus preferencias.
 
 Una aplicación web moderna construida con **Astro 5.x** y **Gemini AI** que genera itinerarios de viaje completos y personalizados en segundos.
 
@@ -17,6 +18,13 @@ Una aplicación web moderna construida con **Astro 5.x** y **Gemini AI** que gen
 
 ![Travel Web Screenshot](./.github/assets/screenshot.png)
 _Generador de itinerarios con IA - Formulario de preferencias_
+- **Framework**: [Astro 5.14+](https://astro.build/)
+- **Lenguaje**: TypeScript 5.9+
+- **Estilos**: [Tailwind CSS 4.1+](https://tailwindcss.com/)
+- **IA**: Groq AI (antes Google Generative AI)
+- **Testing**: [Vitest](https://vitest.dev/)
+- **Deployment**: [Vercel](https://vercel.com/)
+- **APIs**: Unsplash para imágenes
 
 </div>
 
@@ -105,44 +113,43 @@ travel-web/
 │   ├── project-briefing.md     # Visión y estrategia
 │   └── copilot-instructions.md # Guía de desarrollo
 ├── public/
-│   └── favicon.svg
+│   └── robots.txt
 ├── src/
-│   ├── assets/
-│   │   └── images/             # Imágenes estáticas
-│   ├── components/
-│   │   ├── Header/             # Componente de cabecera
-│   │   └── TravelForm/         # Formulario principal
-│   │       ├── TravelForm.astro
-│   │       ├── FormField.astro
-│   │       ├── ActivitiesSection.astro
-│   │       ├── ActivityButton.astro
-│   │       ├── formHandler.ts
-│   │       └── searchHandler.ts
-│   ├── layouts/
-│   │   └── Layout.astro        # Layout base
-│   ├── pages/
-│   │   ├── index.astro         # Página principal
-│   │   ├── api/
-│   │   │   ├── search.ts       # Endpoint de búsqueda con IA
-│   │   │   └── unsplash-image.ts
-│   │   └── itinerary/
-│   │       └── [destination].astro  # Página dinámica de itinerarios
-│   ├── styles/
-│   │   ├── global.css          # Estilos globales
-│   │   └── itinerary.css       # Estilos específicos
-│   └── utils/
-│       ├── cache.ts            # Sistema de cache
-│       ├── cacheManager.ts
-│       ├── clientCache.ts
-│       ├── systemInstructions.ts
-│       ├── transformMarkdownToJson.ts
-│       └── unsplashService.ts
-├── astro.config.mjs            # Configuración de Astro
-├── tailwind.config.js          # Configuración de Tailwind
-├── tsconfig.json               # Configuración de TypeScript
-├── vercel.json                 # Configuración de Vercel
-├── CACHE_SYSTEM.md             # Documentación del cache
-└── package.json
+│   ├── __tests__/        # Tests unitarios e integración
+│   │   └── api/          # Tests de endpoints API
+│   ├── assets/           # Recursos estáticos
+│   │   └── images/       # Imágenes de destinos
+│   ├── components/       # Componentes reutilizables
+│   │   ├── Header/       # Componente de encabezado
+│   │   ├── SEO/          # Componente de SEO
+│   │   ├── Toast/        # Sistema de notificaciones
+│   │   └── TravelForm/   # Formulario principal de búsqueda
+│   ├── layouts/          # Layouts base
+│   │   └── Layout.astro  # Layout principal
+│   ├── pages/            # Páginas y API routes
+│   │   ├── api/          # Endpoints de la API
+│   │   │   ├── search.ts         # Búsqueda de destinos
+│   │   │   └── unsplash-image.ts # Obtención de imágenes
+│   │   ├── index.astro   # Página de inicio
+│   │   └── itinerary/    # Páginas dinámicas de itinerarios
+│   ├── styles/           # Estilos globales
+│   │   ├── global.css
+│   │   └── itinerary.css
+│   └── utils/         | Acción                                               |
+| :------------------- | :--------------------------------------------------- |
+| `npm install`        | Instala las dependencias                             |
+| `npm run dev`        | Inicia el servidor de desarrollo en `localhost:4321` |
+| `npm run build`      | Construye el sitio para producción en `./dist/`      |
+| `npm run preview`    | Previsualiza la build localmente                     |
+| `npm run test`       | Ejecuta los tests en modo watch                      |
+| `npm run test:ui`    | Ejecuta tests con interfaz visual                    |
+| `npm run test:coverage` | Genera reporte de cobertura de tests            |
+| `npm run astro`   ation/   # Documentación de migración a Groq
+├── astro.config.mjs      # Configuración de Astro
+├── tailwind.config.mjs   # Configuración de Tailwind
+├── tsconfig.json         # Configuración de TypeScript
+├── vitest.config.ts      # Configuración de tests
+└── vercel.json           # Configuración de deployment
 ```
 
 ## 🚀 Inicio Rápido
@@ -169,6 +176,7 @@ travel-web/
    ```
 
 3. **Configura las variables de entorno**
+   ROQ_API_KEY=tu_api_key_de_groq
 
    Crea un archivo `.env` en la raíz del proyecto:
 
@@ -207,25 +215,25 @@ travel-web/
 
 ### Flujo de Usuario
 
-```
-1. Usuario completa formulario con preferencias
-   ├── Destino (texto libre)
-   ├── Presupuesto (económico/moderado/premium)
-   ├── Duración (fin de semana a 1 mes)
-   ├── Estilo de viaje (mochilero/lujo/familiar/aventura)
-   ├── Alojamiento (hotel/hostal/apartamento/resort)
-   ├── Temporada (verano/invierno/primavera/otoño)
-   └── Actividades (múltiple selección)
+- Itinerarios personalizados basados en Groq AI
+- Recomendaciones de actividades y lugares
+- Integración con imágenes de alta calidad desde Unsplash
 
-2. Sistema envía preferencias a Gemini AI
+### Sistema de Caché Multicapa
 
-3. IA genera itinerario completo (2-5 segundos)
-   ├── Descripción del destino
-   ├── Plan día por día
-   ├── Actividades con horarios
-   ├── Ubicaciones específicas
-   ├── Costos estimados
-   └── Tips y recomendaciones
+- Cache del servidor (Memory) para APIs
+- Cache del cliente (LocalStorage) para formularios y búsquedas
+- Cache de assets con HTTP headers optimizados
+- Gestión automática de datos temporales
+- Optimización de llamadas a APIs externas
+- Ver [CACHE_SYSTEM.md](CACHE_SYSTEM.md) para detalles
+
+### Testing Automatizado
+
+- Tests unitarios e integración con Vitest
+- Cobertura de tests para APIs y servicios
+- Interfaz visual para ejecución de tests
+- Ver [TESTING.md](TESTING.md) para más información
 
 4. Usuario visualiza itinerario personalizado
    └── Con imagen del destino (Unsplash)
@@ -233,39 +241,76 @@ travel-web/
 
 ### Características Técnicas Clave
 
-- **Cache inteligente**: Las respuestas se cachean durante 1 hora (TTL configurable)
-- **Validación robusta**: Todos los inputs validados con Zod schemas
-- **SSG optimizado**: Páginas pre-renderizadas para máxima velocidad
-- **API Routes**: Endpoints serverless en Vercel
-- **Type-safe**: TypeScript en todo el proyecto
+- 🗼 **París** - La ciudad del amor
+- 🏛️ **Roma** - Historia y cultura
+- 🗽 **Nueva York** - La gran man4.1+ con configuración personalizada. Puedes modificar los estilos en:
 
-## � Deployment en Vercel
+- `src/styles/global.css` - Estilos globales
+- `src/components/*/**.css` - Estilos scoped de componentes
+- `src/styles/itinerary.css` - Estilos específicos de itinerarios
 
-### Deployment Automático
+### APIs y Servicios
 
-1. **Conecta tu repositorio** a Vercel
-2. **Configura las variables de entorno** en el dashboard:
-   ```
-   GEMINI_API_KEY=tu_api_key
-   UNSPLASH_ACCESS_KEY=tu_access_key (opcional)
-   ```
-3. **Deploy automático** en cada push a `main` o `develop`
+- **Groq AI**: Generación de itinerarios con el modelo llama-3.1-70b
+- **Unsplash**: Obtención de imágenes de destinos
+- **Sistema de Caché**: Multicapa optimizado para performance
+
+### Estructura de Componentes
+
+- Componentes server-side por defecto (mejora performance)
+- Cliente hidratación selectiva con directivas `client:*`
+- TypeScript obligatorio para type safety:
+  - `GROQ_API_KEY` - API key de Groq
+  - `UNSPLASH_ACCESS_KEY` - Access key de Unsplash
+
+3. El deployment se ejecuta automáticamente en cada push a main
+4. Los assets estáticos se cachean por 1 año
+5. Las imágenes dinámicas se cachean por 1 día
+   El proyecto utiliza Tailwind CSS con configuración personalizada. Puedes modificar los estilos en:
 
 ### Variables de Entorno en Vercel
 
 Ve a: `Project Settings → Environment Variables`
 
-| Variable              | Tipo   | Requerido   | Descripción                 |
-| --------------------- | ------ | ----------- | --------------------------- |
-| `GEMINI_API_KEY`      | Secret | ✅ Sí       | API key de Google Gemini AI |
-| `UNSPLASH_ACCESS_KEY` | Secret | ⚠️ Opcional | Para imágenes de destinos   |
+- \*\*� Documentación Adicional
 
-### Performance
+- [CACHE_SYSTEM.md](CACHE_SYSTEM.md) - Detalles del sistema de caché
+- [TESTING.md](TESTING.md) - Guía de testing y ejecución de tests
+- [.github/copilot-instructions.md](.github/copilot-instructions.md) - Convenciones de codificación del proyecto
 
-- ✅ **SSG por defecto**: Páginas pre-renderizadas
-- ✅ **Edge Functions**: API routes optimizadas
-- ✅ **Cache headers**: Configurados automáticamente
-- ✅ **Asset optimization**: Hash automático en builds
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ve el archivo [LICENSE](LICENSE) para más detalles.
+
+## 🤝 Contribuciones
+
+Las contribuciones son bienvenidas. Por favor:
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Asegúrate que los tests pasen (`npm run test`)
+4. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+5. Push a la rama (`git push origin feature/AmazingFeature`)
+   6# 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ve el archivo [LICENSE](LICENSE) para más detalles.
+
+## 🤝 Contribuciones
+
+Las contribuciones son bienvenidas. Por favor:
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📞 Soporte
+
+Si tienes preguntas o problemas, puedes:
+
+- Crear un [issue](https://github.com/devlitus/travel-web/issues)
+- Contactar al equipo de desarrollo
 
 ---
 

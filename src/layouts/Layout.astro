@@ -2,15 +2,48 @@
 import "../styles/global.css";
 import favicon from "../assets/favicon.svg";
 import Header from "../components/Header/Header.astro";
+import SEO from "../components/SEO/SEO.astro";
+import Toaster from "../components/Toast/Toaster.astro";
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  keywords?: string;
+  noindex?: boolean;
+  canonical?: string;
+  structuredData?: object;
+}
+
+const {
+  title,
+  description,
+  image,
+  type,
+  keywords,
+  noindex,
+  canonical,
+  structuredData,
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href={favicon.src} />
-    <title>TravelGen - Generador de Viajes Personalizado</title>
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      type={type}
+      keywords={keywords}
+      noindex={noindex}
+      canonical={canonical}
+      structuredData={structuredData}
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   </head>
@@ -19,5 +52,6 @@ import Header from "../components/Header/Header.astro";
     <main>
       <slot />
     </main>
+    <Toaster />
   </body>
 </html>

@@ -2,32 +2,32 @@
 
 
 @theme {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
+  --background: 210 41% 18%;
+  --foreground: 210 7% 85%;
+  --card: 210 29% 32%;
+  --card-foreground: 210 7% 85%;
+  --popover: 210 41% 18%;
+  --popover-foreground: 210 7% 85%;
+  --primary: 210 41% 18%;
+  --primary-foreground: 210 7% 85%;
+  --secondary: 210 29% 32%;
+  --secondary-foreground: 210 7% 85%;
+  --muted: 180 5% 72%;
+  --muted-foreground: 180 5% 72%;
+  --accent: 210 41% 18%;
+  --accent-foreground: 210 7% 85%;
   --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 212.7 26.8% 83.9%;
+  --destructive-foreground: 210 7% 85%;
+  --border: 210 29% 32%;
+  --input: 210 29% 32%;
+  --ring: 210 41% 18%;
   --radius: 0.5rem;
 
-  --primary-color: #3b82f6;
-  --secondary-color: #1e293b;
-  --text-color: #f8fafc;
-  --background-color: #0f172a;
-  --border-color: #334155;
+  --primary-color: #1A2D42;
+  --secondary-color: #2E4156;
+  --text-color: #D4D8DD;
+  --background-color: #1A2D42;
+  --border-color: #2E4156;
 }
 
 body {
@@ -44,12 +44,13 @@ body {
 
 /* Glassmorphism card effect */
 .glass-card {
-  background: rgba(25, 30, 50, 0.5);
+  background: rgba(26, 45, 66, 0.5);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(212, 216, 221, 0.1);
 }
 
-input, select {
+input,
+select {
   background-color: hsl(var(--secondary));
   color: hsl(var(--foreground));
   border: 1px solid hsl(var(--border));
@@ -64,7 +65,7 @@ input::placeholder {
 .destination-card {
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   padding: 24px;
   width: 280px;
   display: flex;
@@ -102,22 +103,18 @@ input::placeholder {
 
 /* Loading animation for hero background */
 #hero-background:not([style*="background-image"]) {
-  background: linear-gradient(
-    45deg,
-    #1e293b 25%,
-    transparent 25%,
-    transparent 75%,
-    #1e293b 75%,
-    #1e293b
-  ),
-  linear-gradient(
-    45deg,
-    #1e293b 25%,
-    transparent 25%,
-    transparent 75%,
-    #1e293b 75%,
-    #1e293b
-  );
+  background: linear-gradient(45deg,
+      #2E4156 25%,
+      transparent 25%,
+      transparent 75%,
+      #2E4156 75%,
+      #2E4156),
+    linear-gradient(45deg,
+      #2E4156 25%,
+      transparent 25%,
+      transparent 75%,
+      #2E4156 75%,
+      #2E4156);
   background-size: 30px 30px;
   background-position: 0 0, 15px 15px;
   animation: hero-loading 1s linear infinite;
@@ -127,8 +124,8 @@ input::placeholder {
   0% {
     background-position: 0 0, 15px 15px;
   }
+
   100% {
     background-position: 30px 30px, 45px 45px;
   }
 }
-
