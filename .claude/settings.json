@@ -78,9 +78,9 @@
       {
         "hooks": [
           {
-            "type": "prompt",
-            "prompt": "Revisa si las tareas han sido completadas correctamente. ¿Hay algo pendiente o incompleto? Responde JSON: {\"should_continue\": true/false, \"reason\": \"explicación breve\"}",
-            "timeout": 20
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && changed=$(git diff --name-only 2>/dev/null; git diff --cached --name-only 2>/dev/null; git ls-files --others --exclude-standard 2>/dev/null | grep -vE '^(docs/|node_modules/)'); if [ -n \"$changed\" ]; then echo \"✅ Archivos modificados en esta sesión. Verifica que la implementación está completa antes de terminar.\"; fi",
+            "timeout": 10
           }
         ]
       }
