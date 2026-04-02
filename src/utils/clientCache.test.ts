@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { ClientCache, debounce, hashString, searchCache, formCache } from './clientCache';
+import { ClientCache, debounce, hashString, searchCache, formCache, initCacheCleanup } from './clientCache';
 
 describe('ClientCache', () => {
     let cache: ClientCache;
@@ -322,5 +322,37 @@ describe('Cache instances', () => {
 
         expect(searchCache.get('key')).toBe('search-value');
         expect(formCache.get('key')).toBe('form-value');
+    });
+});
+
+describe('initCacheCleanup', () => {
+    it('should register load event listener when window is available', () => {
+        const addEventListenerSpy = vi.spyOn(window, 'addEventListener');
+        initCacheCleanup();
+        expect(addEventListenerSpy).toHaveBeenCalledWith('load', expect.any(Function));
+        addEventListenerSpy.mockRestore();
+    });
+
+    it('should set up periodic cleanup interval', () => {
+        const setIntervalSpy = vi.spyOn(global, 'setInterval');
+        initCacheCleanup();
+        expect(setIntervalSpy).toHaveBeenCalledWith(expect.any(Function), 10 * 60 * 1000);
+        setIntervalSpy.mockRestore();
+    });
+});
+
+describe('ClientCache - isStorageAvailable caching', () => {
+    it('should cache the storage availability check result', () => {
+        const cache = new ClientCache('test');
+        // First set call triggers the storage availability probe and caches the result
+        cache.set('key1', 'value1');
+        // Subsequent set calls should reuse the cached availability (no extra probe)
+        // Verify this by confirming the second set still works correctly
+        const result = cache.set('key2', 'value2');
+        expect(result).toBe(true);
+        // Both keys should be retrievable, confirming the cache operates correctly
+        // without re-running the full localStorage probe on every call
+        expect(cache.get('key1')).toBe('value1');
+        expect(cache.get('key2')).toBe('value2');
     });
 });

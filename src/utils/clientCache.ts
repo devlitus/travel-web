@@ -4,7 +4,8 @@
  */
 export class ClientCache {
   private static readonly DEFAULT_TTL = 30 * 60 * 1000; // 30 minutos
-  
+  private storageAvailable: boolean | null = null;
+
   constructor(private prefix: string) {}
 
   /**
@@ -15,17 +16,19 @@ export class ClientCache {
   }
 
   /**
-   * Verifica si localStorage está disponible
+   * Verifica si localStorage está disponible (resultado cacheado por instancia)
    */
   private isStorageAvailable(): boolean {
+    if (this.storageAvailable !== null) return this.storageAvailable;
     try {
       const test = '__storage_test__';
       localStorage.setItem(test, test);
       localStorage.removeItem(test);
-      return true;
+      this.storageAvailable = true;
     } catch {
-      return false;
+      this.storageAvailable = false;
     }
+    return this.storageAvailable;
   }
 
   /**
@@ -224,16 +227,17 @@ export const searchCache = new ClientCache('travel-search');
 export const formCache = new ClientCache('travel-form');
 
 /**
- * Limpia todos los caches automáticamente al cargar la página
+ * Initializes automatic cache cleanup.
+ * Call this once from your app's entry point.
  */
-if (typeof window !== 'undefined') {
-  // Ejecutar cleanup cuando se carga la página
+export function initCacheCleanup(): void {
+  if (typeof window === 'undefined') return;
+
   window.addEventListener('load', () => {
     searchCache.cleanup();
     formCache.cleanup();
   });
 
-  // Cleanup periódico cada 10 minutos
   setInterval(() => {
     searchCache.cleanup();
     formCache.cleanup();
