@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,300;0,400;0,600;1,300&amp;family=Manrope:wght@200;300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error": "#ffffff",
+              "on-primary-fixed-variant": "#065043",
+              "on-primary-container": "#94d3c1",
+              "inverse-surface": "#f1f1f1",
+              "on-tertiary-fixed-variant": "#ffdbcb",
+              "surface-container-highest": "#333333",
+              "secondary": "#e9c176",
+              "outline-variant": "#3f4848",
+              "tertiary": "#fcb795",
+              "secondary-fixed-dim": "#775a19",
+              "error": "#ffdad6",
+              "secondary-fixed": "#775a19",
+              "error-container": "#93000a",
+              "surface-container-high": "#2b2b2b",
+              "surface-tint": "#94d3c1",
+              "surface": "#0a0a0a",
+              "surface-container": "#1a1a1a",
+              "background": "#0a0a0a",
+              "on-tertiary-container": "#ffdbcb",
+              "tertiary-container": "#4c230b",
+              "on-secondary": "#261900",
+              "primary-fixed": "#afefdd",
+              "surface-container-lowest": "#000000",
+              "inverse-primary": "#00352c",
+              "on-secondary-container": "#fed488",
+              "secondary-container": "#5d4201",
+              "primary": "#94d3c1",
+              "on-primary": "#00201a",
+              "tertiary-fixed": "#ffdbcb",
+              "outline": "#899392",
+              "on-tertiary-fixed": "#341100",
+              "surface-variant": "#3f4848",
+              "on-surface-variant": "#bfc8c8",
+              "on-primary-fixed": "#00201a",
+              "on-background": "#e2e2e2",
+              "on-secondary-fixed": "#261900",
+              "primary-container": "#005044",
+              "surface-container-low": "#121212",
+              "surface-bright": "#1a1a1a",
+              "tertiary-fixed-dim": "#fcb795",
+              "surface-dim": "#0a0a0a",
+              "inverse-on-surface": "#1a1c1c",
+              "on-surface": "#e2e2e2",
+              "on-tertiary": "#341100",
+              "on-error-container": "#ffdad6",
+              "primary-fixed-dim": "#94d3c1",
+              "on-secondary-fixed-variant": "#fed488"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0a0a0a;
+            color: #e2e2e2;
+            font-family: 'Manrope', sans-serif;
+        }
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px #0a0a0a inset !important;
+            -webkit-text-fill-color: #e2e2e2 !important;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<main class="pt-24 pb-48 px-6 max-w-4xl mx-auto">
+<!-- Hero Title -->
+<section class="mb-32 text-center">
+<h1 class="font-headline text-5xl md:text-7xl text-on-surface font-light tracking-tight leading-tight">
+            Design your <br/>
+<span class="italic text-secondary">next horizon.</span>
+</h1>
+<p class="mt-8 font-body text-on-surface-variant max-w-lg mx-auto font-light leading-relaxed opacity-80">
+            Provide the details of your desired escape. Our concierge engine will curate a bespoke itinerary tailored to your specific essence.
+        </p>
+</section>
+<form class="space-y-40">
+<!-- 1. Destination -->
+<section class="group">
+<label class="block font-label text-[10px] uppercase tracking-[0.3em] text-secondary font-semibold mb-8">01. Destination</label>
+<h2 class="font-headline text-3xl text-on-surface mb-10">Where do you dream of?</h2>
+<div class="relative max-w-2xl">
+<input class="w-full bg-transparent border-b border-outline-variant focus:border-primary focus:ring-0 py-5 text-2xl font-body font-light placeholder:text-stone-700 transition-all duration-500 outline-none" placeholder="Enter a city, region or mood..." type="text"/>
+</div>
+</section>
+<!-- 2. Duration -->
+<section>
+<label class="block font-label text-[10px] uppercase tracking-[0.3em] text-secondary font-semibold mb-8">02. Duration</label>
+<h2 class="font-headline text-3xl text-on-surface mb-12">How long?</h2>
+<div class="flex flex-wrap gap-5">
+<button class="px-10 py-4 rounded-full border border-outline-variant text-on-surface font-body text-sm hover:border-primary transition-all duration-300" type="button">Weekend</button>
+<button class="px-10 py-4 rounded-full border border-primary bg-primary text-on-primary font-body text-sm font-semibold" type="button">Full Week</button>
+<button class="px-10 py-4 rounded-full border border-outline-variant text-on-surface font-body text-sm hover:border-primary transition-all duration-300" type="button">Fortnight</button>
+<button class="px-10 py-4 rounded-full border border-outline-variant text-on-surface font-body text-sm hover:border-primary transition-all duration-300" type="button">Extended</button>
+</div>
+</section>
+<!-- 3. Accommodation -->
+<section>
+<label class="block font-label text-[10px] uppercase tracking-[0.3em] text-secondary font-semibold mb-8">03. Accommodation</label>
+<h2 class="font-headline text-3xl text-on-surface mb-14">Where to stay?</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-outline-variant/20 rounded-lg overflow-hidden border border-outline-variant/20">
+<div class="p-10 bg-surface-container-low hover:bg-surface-container-high transition-all duration-500 flex flex-col justify-between min-h-[220px] cursor-pointer group">
+<span class="material-symbols-outlined text-primary text-4xl group-hover:scale-110 transition-transform">domain</span>
+<p class="font-body text-on-surface font-light mt-6 tracking-wide">Hotel Boutique</p>
+</div>
+<div class="p-10 bg-surface-container-low hover:bg-surface-container-high transition-all duration-500 flex flex-col justify-between min-h-[220px] cursor-pointer group">
+<span class="material-symbols-outlined text-primary text-4xl group-hover:scale-110 transition-transform">cabin</span>
+<p class="font-body text-on-surface font-light mt-6 tracking-wide">Cabaña Rural</p>
+</div>
+<div class="p-10 bg-surface-container-low hover:bg-surface-container-high transition-all duration-500 flex flex-col justify-between min-h-[220px] cursor-pointer group">
+<span class="material-symbols-outlined text-primary text-4xl group-hover:scale-110 transition-transform">apartment</span>
+<p class="font-body text-on-surface font-light mt-6 tracking-wide">Apartamento Lujo</p>
+</div>
+<div class="p-10 bg-surface-container-low hover:bg-surface-container-high transition-all duration-500 flex flex-col justify-between min-h-[220px] cursor-pointer group">
+<span class="material-symbols-outlined text-primary text-4xl group-hover:scale-110 transition-transform">camping</span>
+<p class="font-body text-on-surface font-light mt-6 tracking-wide">Glamping Lujo</p>
+</div>
+<div class="p-10 bg-surface-container-low hover:bg-surface-container-high transition-all duration-500 flex flex-col justify-between min-h-[220px] cursor-pointer group">
+<span class="material-symbols-outlined text-primary text-4xl group-hover:scale-110 transition-transform">night_shelter</span>
+<p class="font-body text-on-surface font-light mt-6 tracking-wide">Hostal Bohemio</p>
+</div>
+<div class="p-10 bg-surface-container-low hover:bg-surface-container-high transition-all duration-500 flex flex-col justify-between min-h-[220px] cursor-pointer group">
+<span class="material-symbols-outlined text-primary text-4xl group-hover:scale-110 transition-transform">villa</span>
+<p class="font-body text-on-surface font-light mt-6 tracking-wide">Villa Privada</p>
+</div>
+<div class="p-10 bg-surface-container-low hover:bg-surface-container-high transition-all duration-500 flex flex-col justify-between min-h-[220px] cursor-pointer group">
+<span class="material-symbols-outlined text-primary text-4xl group-hover:scale-110 transition-transform">directions_boat</span>
+<p class="font-body text-on-surface font-light mt-6 tracking-wide">Crucero Estelar</p>
+</div>
+<div class="p-10 bg-surface-container-low hover:bg-surface-container-high transition-all duration-500 flex flex-col justify-between min-h-[220px] cursor-pointer group">
+<span class="material-symbols-outlined text-primary text-4xl group-hover:scale-110 transition-transform">landscape</span>
+<p class="font-body text-on-surface font-light mt-6 tracking-wide">Refugio de Montaña</p>
+</div>
+<div class="p-10 bg-primary/10 border border-primary/30 hover:bg-primary/20 transition-all duration-500 flex flex-col justify-between min-h-[220px] cursor-pointer group">
+<span class="material-symbols-outlined text-primary text-4xl group-hover:scale-110 transition-transform">self_improvement</span>
+<p class="font-body text-primary font-medium mt-6 tracking-wide">Zen Retreat</p>
+</div>
+</div>
+</section>
+<!-- 4. Budget -->
+<section>
+<label class="block font-label text-[10px] uppercase tracking-[0.3em] text-secondary font-semibold mb-8">04. Budget</label>
+<div class="flex justify-between items-end mb-10">
+<h2 class="font-headline text-3xl text-on-surface">Estimated budget</h2>
+<span class="font-body text-3xl text-primary font-light">$4,500</span>
+</div>
+<div class="relative py-6">
+<input class="w-full h-[1px] bg-outline-variant appearance-none cursor-pointer accent-primary" max="20000" min="500" step="100" type="range"/>
+<div class="flex justify-between mt-6 font-body text-[10px] text-on-surface-variant uppercase tracking-[0.2em]">
+<span>$500</span>
+<span>$20,000</span>
+</div>
+</div>
+</section>
+<!-- 5. Vibe -->
+<section>
+<label class="block font-label text-[10px] uppercase tracking-[0.3em] text-secondary font-semibold mb-8">05. Vibe</label>
+<h2 class="font-headline text-3xl text-on-surface mb-12">Travel essence</h2>
+<div class="flex flex-wrap gap-x-14 gap-y-8">
+<label class="flex items-center space-x-3 cursor-pointer group">
+<input class="hidden" type="checkbox"/>
+<span class="font-body text-xl text-on-surface-variant group-hover:text-primary transition-all italic font-light">#SlowTravel</span>
+</label>
+<label class="flex items-center space-x-3 cursor-pointer group">
+<input checked="" class="hidden" type="checkbox"/>
+<span class="font-body text-xl text-primary transition-all font-light border-b border-primary/50 pb-1">#CuratedLuxury</span>
+</label>
+<label class="flex items-center space-x-3 cursor-pointer group">
+<input class="hidden" type="checkbox"/>
+<span class="font-body text-xl text-on-surface-variant group-hover:text-primary transition-all italic font-light">#LocalImmersion</span>
+</label>
+<label class="flex items-center space-x-3 cursor-pointer group">
+<input class="hidden" type="checkbox"/>
+<span class="font-body text-xl text-on-surface-variant group-hover:text-primary transition-all italic font-light">#Wilderness</span>
+</label>
+<label class="flex items-center space-x-3 cursor-pointer group">
+<input class="hidden" type="checkbox"/>
+<span class="font-body text-xl text-on-surface-variant group-hover:text-primary transition-all italic font-light">#Gastronomy</span>
+</label>
+</div>
+</section>
+<!-- 6. Season -->
+<section>
+<label class="block font-label text-[10px] uppercase tracking-[0.3em] text-secondary font-semibold mb-8">06. Season</label>
+<h2 class="font-headline text-3xl text-on-surface mb-14">When?</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+<div class="flex flex-col items-center p-8 space-y-6 rounded-xl border border-outline-variant/30 hover:border-primary/50 transition-all duration-500 cursor-pointer bg-surface-container-low/50">
+<span class="material-symbols-outlined text-primary text-4xl">eco</span>
+<p class="font-label text-[10px] tracking-[0.2em] uppercase text-on-surface-variant">Spring</p>
+</div>
+<div class="flex flex-col items-center p-8 space-y-6 rounded-xl border border-outline-variant/30 hover:border-primary/50 transition-all duration-500 cursor-pointer bg-surface-container-low/50">
+<span class="material-symbols-outlined text-primary text-4xl">wb_sunny</span>
+<p class="font-label text-[10px] tracking-[0.2em] uppercase text-on-surface-variant">Summer</p>
+</div>
+<div class="flex flex-col items-center p-8 space-y-6 rounded-xl border border-primary/60 bg-primary/10 transition-all duration-500 cursor-pointer">
+<span class="material-symbols-outlined text-primary text-4xl">nest_eco_leaf</span>
+<p class="font-label text-[10px] tracking-[0.2em] uppercase text-primary font-bold">Autumn</p>
+</div>
+<div class="flex flex-col items-center p-8 space-y-6 rounded-xl border border-outline-variant/30 hover:border-primary/50 transition-all duration-500 cursor-pointer bg-surface-container-low/50">
+<span class="material-symbols-outlined text-primary text-4xl">ac_unit</span>
+<p class="font-label text-[10px] tracking-[0.2em] uppercase text-on-surface-variant">Winter</p>
+</div>
+</div>
+</section>
+<!-- CTA -->
+<section class="pt-24 border-t border-outline-variant/10 flex justify-center">
+<button class="group relative px-20 py-7 bg-primary text-on-primary overflow-hidden transition-all duration-500 active:scale-95" type="submit">
+<span class="relative z-10 font-label tracking-[0.4em] uppercase text-[10px] font-bold">Generar Propuesta</span>
+<div class="absolute inset-0 bg-white/10 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+</button>
+</section>
+</form>
+</main>
+<!-- Navigation indicator (Minimalist) -->
+<div class="fixed right-8 top-1/2 -translate-y-1/2 hidden lg:flex flex-col space-y-4">
+<div class="w-1 h-8 bg-primary rounded-full"></div>
+<div class="w-1 h-4 bg-outline-variant/30 rounded-full"></div>
+<div class="w-1 h-4 bg-outline-variant/30 rounded-full"></div>
+<div class="w-1 h-4 bg-outline-variant/30 rounded-full"></div>
+<div class="w-1 h-4 bg-outline-variant/30 rounded-full"></div>
+<div class="w-1 h-4 bg-outline-variant/30 rounded-full"></div>
+</div>
+</body></html>

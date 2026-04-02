@@ -39,8 +39,8 @@ export default defineConfig({
       // Optimizaciones adicionales
       minify: 'esbuild',
       cssMinify: true,
-      reportCompressedSize: false,
-      chunkSizeWarningLimit: 1000
+      reportCompressedSize: true,
+      chunkSizeWarningLimit: 500
     }
   }
 });

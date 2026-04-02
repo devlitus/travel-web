@@ -9,12 +9,12 @@ Travel Web is an Astro 5.x application that generates personalized travel itiner
 ## Development Commands
 
 ```bash
-npm run dev           # Start dev server at localhost:4321
-npm run build         # Build for production
-npm run preview       # Preview production build
-npm test              # Run Vitest tests
-npm test:ui           # Run tests with UI
-npm test:coverage     # Run tests with coverage report
+pnpm run dev           # Start dev server at localhost:4321
+pnpm run build         # Build for production
+pnpm run preview       # Preview production build
+pnpm test              # Run Vitest tests
+pnpm test:ui           # Run tests with UI
+pnpm test:coverage     # Run tests with coverage report
 ```
 
 ## Environment Variables Required
