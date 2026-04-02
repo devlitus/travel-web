@@ -33,12 +33,24 @@ const groq = createGroq({
 
 const travelSchema = z.object({
   destination: z.string().min(1, "El destino es requerido"),
-  budget: z.enum(["low", "medium", "high"]),
-  duration: z.enum(["weekend", "1-week", "2-weeks", "month"]),
-  travelStyle: z.enum(["backpacking", "luxury", "family", "adventure"]),
-  accommodation: z.enum(["hotel", "hostel", "apartment", "resort"]),
+  budget: z.enum(["500-2000", "2000-4500", "4500-10000", "10000-20000"]),
+  duration: z.enum(["weekend", "full_week", "fortnight", "extended"]),
+  accommodation: z.enum([
+    "hotel_boutique",
+    "cabana_rural",
+    "apartamento_lujo",
+    "glamping_lujo",
+    "hostal_bohemio",
+    "villa_privada",
+    "crucero_estelar",
+    "refugio_montana",
+    "zen_retreat",
+  ]),
   season: z.enum(["summer", "winter", "spring", "autumn"]),
-  activities: z.array(z.string()).min(1, "Selecciona al menos una actividad"),
+  vibes: z
+    .union([z.string(), z.array(z.string())])
+    .transform((v) => (Array.isArray(v) ? v : [v]))
+    .optional(),
 });
 
 export const POST: APIRoute = async ({ request }) => {
@@ -57,10 +69,9 @@ export const POST: APIRoute = async ({ request }) => {
       destination,
       budget,
       duration,
-      travelStyle,
       accommodation,
       season,
-      activities,
+      vibes,
     } = validatedData;
 
     // Generar clave de cache basada en todos los parámetros
@@ -80,8 +91,9 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
+    const vibesStr = vibes && vibes.length > 0 ? vibes.join(", ") : "";
     const query = `
-     Busca ${destination} en ${budget} ${duration} ${travelStyle} ${accommodation} ${season} ${activities}
+     Destino: ${destination}. Duración: ${duration}. Alojamiento: ${accommodation}. Presupuesto: $${budget} USD. Temporada: ${season}.${vibesStr ? ` Estilo de viaje: ${vibesStr}.` : ""}
     `;
 
     // Llamar a Groq AI con manejo de errores
