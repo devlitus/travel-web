@@ -15,9 +15,9 @@ export interface FormData {
 
 export class FormHandler {
   private form: HTMLFormElement;
-  private activityButtons: NodeListOf<HTMLButtonElement>;
+  private activityButtons: NodeListOf<HTMLButtonElement> | null;
 
-  constructor(form: HTMLFormElement, activityButtons: NodeListOf<HTMLButtonElement>) {
+  constructor(form: HTMLFormElement, activityButtons: NodeListOf<HTMLButtonElement> | null = null) {
     this.form = form;
     this.activityButtons = activityButtons;
   }
@@ -39,7 +39,7 @@ export class FormHandler {
     });
 
     // Restaurar actividades seleccionadas
-    if (cachedForm.activities && Array.isArray(cachedForm.activities)) {
+    if (cachedForm.activities && Array.isArray(cachedForm.activities) && this.activityButtons) {
       this.activityButtons.forEach((button) => {
         const buttonText = button.querySelector("span")?.textContent?.trim();
         if (
@@ -57,10 +57,12 @@ export class FormHandler {
     const data = new FormData(this.form);
     const formData = Object.fromEntries(data);
 
-    const selectedActivities = Array.from(this.activityButtons)
-      .filter((button) => button.classList.contains("active"))
-      .map((button) => button.querySelector("span")?.textContent?.trim())
-      .filter(Boolean) as string[];
+    const selectedActivities = this.activityButtons
+      ? Array.from(this.activityButtons)
+          .filter((button) => button.classList.contains("active"))
+          .map((button) => button.querySelector("span")?.textContent?.trim())
+          .filter(Boolean) as string[]
+      : [];
 
     const completeFormData: FormData = {
       ...formData,
@@ -74,10 +76,12 @@ export class FormHandler {
     const data = new FormData(this.form);
     const formData = Object.fromEntries(data);
 
-    const selectedActivities = Array.from(this.activityButtons)
-      .filter((button) => button.classList.contains("active"))
-      .map((button) => button.querySelector("span")?.textContent?.trim())
-      .filter(Boolean) as string[];
+    const selectedActivities = this.activityButtons
+      ? Array.from(this.activityButtons)
+          .filter((button) => button.classList.contains("active"))
+          .map((button) => button.querySelector("span")?.textContent?.trim())
+          .filter(Boolean) as string[]
+      : [];
 
     return {
       ...formData,

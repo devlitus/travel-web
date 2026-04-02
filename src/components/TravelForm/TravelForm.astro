@@ -1,129 +1,353 @@
 ---
-import FormField from "./FormField.astro";
-import ActivitiesSection from "./ActivitiesSection.astro";
 import "./TravelForm.css";
 
-const formFields = [
+const accommodationOptions = [
+  { value: "hotel_boutique", label: "Hotel Boutique", icon: "domain" },
+  { value: "cabana_rural", label: "Cabaña Rural", icon: "cabin" },
+  { value: "apartamento_lujo", label: "Apartamento Lujo", icon: "apartment" },
+  { value: "glamping_lujo", label: "Glamping Lujo", icon: "camping" },
+  { value: "hostal_bohemio", label: "Hostal Bohemio", icon: "night_shelter" },
+  { value: "villa_privada", label: "Villa Privada", icon: "villa" },
   {
-    name: "destination",
-    label: "Destino soñado",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>`,
-    type: "text" as const,
-    placeholder: "¿Dónde sueñas viajar? 🌍",
+    value: "crucero_estelar",
+    label: "Crucero Estelar",
+    icon: "directions_boat",
   },
-  {
-    name: "budget",
-    label: "Presupuesto",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg>`,
-    type: "select" as const,
-    placeholder: "¿Cuánto quieres invertir? 💸",
-    options: [
-      { value: "low", label: "💰 Económico" },
-      { value: "medium", label: "💰💰 Moderado" },
-      { value: "high", label: "💰💰💰 Premium" },
-    ],
-  },
-  {
-    name: "duration",
-    label: "Duración del viaje",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>`,
-    type: "select" as const,
-    placeholder: "¿Cuánto tiempo tienes? ⏳",
-    options: [
-      { value: "weekend", label: "🌙 Fin de semana" },
-      { value: "1-week", label: "🌙🌙 1 semana" },
-      { value: "2-weeks", label: "🌙🌙🌙 2 semanas" },
-      { value: "month", label: "🌙🌙🌙🌙 1 mes o más" },
-    ],
-  },
-  {
-    name: "travelStyle",
-    label: "Estilo de viaje",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>`,
-    type: "select" as const,
-    placeholder: "¿Cómo te gusta viajar? 🎒",
-    options: [
-      { value: "backpacking", label: "🎒 Mochilero" },
-      { value: "luxury", label: "💎 Lujoso" },
-      { value: "family", label: "👨‍👩‍👧‍👦 Familiar" },
-      { value: "adventure", label: "🎢 Aventura" },
-    ],
-  },
-  {
-    name: "accommodation",
-    label: "Alojamiento",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>`,
-    type: "select" as const,
-    placeholder: "¿Dónde prefieres quedarte? 🏨",
-    options: [
-      { value: "hotel", label: "🏨 Hotel" },
-      { value: "hostel", label: "🏨 Hostal" },
-      { value: "apartment", label: "🏨 Apartamento" },
-      { value: "resort", label: "🏨 Resort" },
-    ],
-  },
-  {
-    name: "season",
-    label: "Época preferida",
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`,
-    type: "select" as const,
-    placeholder: "¿Cuándo quieres viajar? ☀️",
-    options: [
-      { value: "summer", label: "🌞 Verano" },
-      { value: "winter", label: "❄️ Invierno" },
-      { value: "spring", label: "🌸 Primavera" },
-      { value: "autumn", label: "🍂 Otoño" },
-    ],
-  },
+  { value: "refugio_montana", label: "Refugio de Montaña", icon: "landscape" },
+  { value: "zen_retreat", label: "Zen Retreat", icon: "self_improvement" },
+];
+
+const vibeOptions = [
+  { value: "slow_travel", label: "#SlowTravel" },
+  { value: "curated_luxury", label: "#CuratedLuxury" },
+  { value: "local_immersion", label: "#LocalImmersion" },
+  { value: "wilderness", label: "#Wilderness" },
+  { value: "gastronomy", label: "#Gastronomy" },
+];
+
+const seasonOptions = [
+  { value: "spring", label: "Primavera", icon: "eco" },
+  { value: "summer", label: "Verano", icon: "wb_sunny" },
+  { value: "autumn", label: "Otoño", icon: "nest_eco_leaf" },
+  { value: "winter", label: "Invierno", icon: "ac_unit" },
 ];
 ---
 
-<form class="glass-card rounded-2xl max-w-4xl mx-auto p-7">
-  <section class="activities-section text-center space-y-2">
-    <h2 class="text-3xl font-bold pb-4">Preferencias de Viaje</h2>
-    <p class="text-gray-400 mb-7">
-      Cada detalle cuenta para crear tu experiencia única
-    </p>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-      {formFields.map((field) => <FormField {...field} />)}
+<form class="travel-form">
+  <section class="tf-section">
+    <label class="tf-section-tag">01. Destino</label>
+    <h2 class="tf-section-title">¿A dónde sueñas?</h2>
+    <div class="tf-input-wrapper">
+      <input
+        class="tf-dest-input"
+        id="destination"
+        name="destination"
+        type="text"
+        placeholder="Escribe una ciudad, región o estado de ánimo..."
+        autocomplete="off"
+        spellcheck="false"
+      />
     </div>
   </section>
-  <hr class="my-12 border-gray-700" />
 
-  <ActivitiesSection />
+  <section class="tf-section">
+    <label class="tf-section-tag">02. Duración</label>
+    <h2 class="tf-section-title">¿Cuánto tiempo?</h2>
+    <select name="duration" class="tf-hidden-select">
+      <option value="">—</option>
+      <option value="weekend">Fin de semana</option>
+      <option value="full_week" selected>Semana completa</option>
+      <option value="fortnight">Quincena</option>
+      <option value="extended">Extendido</option>
+    </select>
+    <div class="tf-pills">
+      <button
+        type="button"
+        class="tf-pill"
+        data-field="duration"
+        data-value="weekend"
+      >
+        Fin de semana
+      </button>
+      <button
+        type="button"
+        class="tf-pill tf-active"
+        data-field="duration"
+        data-value="full_week"
+      >
+        Semana completa
+      </button>
+      <button
+        type="button"
+        class="tf-pill"
+        data-field="duration"
+        data-value="fortnight"
+      >
+        Quincena
+      </button>
+      <button
+        type="button"
+        class="tf-pill"
+        data-field="duration"
+        data-value="extended"
+      >
+        Extendido
+      </button>
+    </div>
+  </section>
 
-  <div class="mt-16 text-center">
-    <button type="submit" class="submit-btn">
-      ✨ Crear Mi Aventura Perfecta ✨
+  <section class="tf-section">
+    <label class="tf-section-tag">03. Alojamiento</label>
+    <h2 class="tf-section-title">¿Dónde alojarse?</h2>
+    <select name="accommodation" class="tf-hidden-select">
+      <option value="">—</option>
+      {
+        accommodationOptions.map((opt) => (
+          <option value={opt.value} selected={opt.value === "zen_retreat"}>
+            {opt.label}
+          </option>
+        ))
+      }
+    </select>
+    <div class="tf-accommodation-grid">
+      {
+        accommodationOptions.map((opt, index) => (
+          <button
+            type="button"
+            class={`tf-accommodation-card ${index === 8 ? "tf-active" : ""}`}
+            data-field="accommodation"
+            data-value={opt.value}
+          >
+            <span class="material-symbols-outlined tf-accommodation-icon">
+              {opt.icon}
+            </span>
+            <p class="tf-accommodation-label">{opt.label}</p>
+          </button>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="tf-section">
+    <label class="tf-section-tag">04. Presupuesto</label>
+    <div class="tf-budget-header">
+      <h2 class="tf-section-title">Presupuesto estimado</h2>
+      <span class="tf-budget-value" id="budgetDisplay">$4,500</span>
+    </div>
+    <select name="budget" class="tf-hidden-select">
+      <option value="">—</option>
+      <option value="500-2000">$500 - $2,000</option>
+      <option value="2000-4500" selected>$2,000 - $4,500</option>
+      <option value="4500-10000">$4,500 - $10,000</option>
+      <option value="10000-20000">$10,000 - $20,000</option>
+    </select>
+    <div class="tf-range-wrapper">
+      <input
+        type="range"
+        class="tf-range"
+        id="budgetRange"
+        min="500"
+        max="20000"
+        step="100"
+        value="4500"
+      />
+      <div class="tf-range-labels">
+        <span>$500</span>
+        <span>$20,000</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="tf-section">
+    <label class="tf-section-tag">05. Vibra</label>
+    <h2 class="tf-section-title">Esencia del viaje</h2>
+    <select name="vibes" class="tf-hidden-select" multiple>
+      <option value="curated_luxury" selected>#CuratedLuxury</option>
+    </select>
+    <div class="tf-vibes-list">
+      {
+        vibeOptions.map((opt) => (
+          <label class="tf-vibe-item">
+            <input
+              type="checkbox"
+              class="tf-vibe-checkbox"
+              name="vibes"
+              value={opt.value}
+            />
+            <span class="tf-vibe-label">{opt.label}</span>
+          </label>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="tf-section">
+    <label class="tf-section-tag">06. Temporada</label>
+    <h2 class="tf-section-title">¿Cuándo?</h2>
+    <select name="season" class="tf-hidden-select">
+      <option value="">—</option>
+      {
+        seasonOptions.map((opt) => (
+          <option value={opt.value} selected={opt.value === "autumn"}>
+            {opt.label}
+          </option>
+        ))
+      }
+    </select>
+    <div class="tf-season-grid">
+      {
+        seasonOptions.map((opt, index) => (
+          <button
+            type="button"
+            class={`tf-season-card ${index === 2 ? "tf-active" : ""}`}
+            data-field="season"
+            data-value={opt.value}
+          >
+            <span class="material-symbols-outlined tf-season-icon">
+              {opt.icon}
+            </span>
+            <p class="tf-season-name">{opt.label}</p>
+          </button>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="tf-submit-section">
+    <button type="submit" class="tf-submit-btn">
+      <span>Generar Propuesta</span>
+      <div class="tf-submit-hover-effect"></div>
     </button>
-    <p class="text-gray-400 text-sm mt-2">
-      Prepárate para descubrir destinos increíbles 🌟
-    </p>
-  </div>
+  </section>
 </form>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+  rel="stylesheet"
+/>
 
 <script>
   import { FormHandler } from "./formHandler";
   import { SearchHandler } from "./searchHandler";
+  import { initCacheCleanup } from "../../utils/clientCache";
 
   const form = document.querySelector("form") as HTMLFormElement;
-  const activityButtons = document.querySelectorAll(
-    ".activity-btn"
-  ) as NodeListOf<HTMLButtonElement>;
 
-  const formHandler = new FormHandler(form, activityButtons);
+  const formHandler = new FormHandler(form, null);
   const searchHandler = new SearchHandler();
 
-  // Inicializar
-  formHandler.loadFromCache();
+  const selectableFields = ["duration", "accommodation", "season"];
 
-  // Event listeners
-  activityButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      button.classList.toggle("active");
-      formHandler.saveToCache();
+  function syncFromSelects(): void {
+    selectableFields.forEach((fieldName) => {
+      const select = form.querySelector(
+        `select[name="${fieldName}"]`,
+      ) as HTMLSelectElement | null;
+      if (!select || !select.value) return;
+      const activeEl = form.querySelector(
+        `[data-field="${fieldName}"][data-value="${select.value}"]`,
+      );
+      if (activeEl) activeEl.classList.add("tf-active");
+    });
+
+    const vibesSelect = form.querySelector(
+      'select[name="vibes"]',
+    ) as HTMLSelectElement | null;
+    if (vibesSelect) {
+      const selectedValues = Array.from(vibesSelect.selectedOptions).map(
+        (opt) => opt.value,
+      );
+      selectedValues.forEach((val) => {
+        const checkbox = form.querySelector(
+          `input[name="vibes"][value="${val}"]`,
+        ) as HTMLInputElement | null;
+        if (checkbox) checkbox.checked = true;
+      });
+      updateVibeStyles();
+    }
+  }
+
+  function syncSelectFromButton(fieldName: string, value: string): void {
+    form.querySelectorAll(`[data-field="${fieldName}"]`).forEach((el) => {
+      el.classList.remove("tf-active");
+    });
+    const activeEl = form.querySelector(
+      `[data-field="${fieldName}"][data-value="${value}"]`,
+    );
+    if (activeEl) activeEl.classList.add("tf-active");
+    const select = form.querySelector(
+      `select[name="${fieldName}"]`,
+    ) as HTMLSelectElement | null;
+    if (select) {
+      select.value = value;
+      select.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+  }
+
+  const selectableButtons = form.querySelectorAll(
+    "[data-field]",
+  ) as NodeListOf<HTMLButtonElement>;
+
+  selectableButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const fieldName = btn.dataset.field!;
+      const value = btn.dataset.value!;
+      syncSelectFromButton(fieldName, value);
     });
   });
+
+  const budgetRange = document.getElementById(
+    "budgetRange",
+  ) as HTMLInputElement;
+  const budgetDisplay = document.getElementById("budgetDisplay");
+
+  if (budgetRange && budgetDisplay) {
+    budgetRange.addEventListener("input", () => {
+      const value = parseInt(budgetRange.value).toLocaleString("en-US");
+      budgetDisplay.textContent = `$${value}`;
+    });
+  }
+
+  function updateVibeStyles(): void {
+    const vibeItems = form.querySelectorAll(".tf-vibe-item");
+    vibeItems.forEach((item) => {
+      const checkbox = item.querySelector(
+        "input[type='checkbox']",
+      ) as HTMLInputElement;
+      const label = item.querySelector(".tf-vibe-label") as HTMLElement;
+      if (checkbox.checked) {
+        label.classList.add("tf-vibe-label-active");
+      } else {
+        label.classList.remove("tf-vibe-label-active");
+      }
+    });
+  }
+
+  const vibeCheckboxes = form.querySelectorAll(
+    ".tf-vibe-checkbox",
+  ) as NodeListOf<HTMLInputElement>;
+
+  vibeCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+      updateVibeStyles();
+      const selectedValues = Array.from(
+        form.querySelectorAll(".tf-vibe-checkbox:checked"),
+      ) as HTMLInputElement[];
+      const vibesSelect = form.querySelector(
+        'select[name="vibes"]',
+      ) as HTMLSelectElement;
+      if (vibesSelect) {
+        Array.from(vibesSelect.options).forEach((opt) => {
+          opt.selected = selectedValues.some((cb) => cb.value === opt.value);
+        });
+        vibesSelect.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    });
+  });
+
+  initCacheCleanup();
+  formHandler.loadFromCache();
+  syncFromSelects();
 
   form.addEventListener("input", formHandler.saveToCache);
   form.addEventListener("change", formHandler.saveToCache);
@@ -131,53 +355,62 @@ const formFields = [
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const completeFormData = formHandler.getFormData();
-    const destination = completeFormData.destination as string;
+    const destination = (form.querySelector("#destination") as HTMLInputElement)
+      ?.value;
 
-    // Validación de destino
     if (!destination) {
       (window as any).toast.warning(
         "Destino requerido",
-        "Por favor, ingresa un destino antes de continuar."
+        "Por favor, ingresa un destino antes de continuar.",
       );
       return;
     }
 
-    // Verificar cache
+    const formData = new FormData(form);
+    const completeFormData: Record<string, any> = {};
+    formData.forEach((value, key) => {
+      if (completeFormData[key]) {
+        if (!Array.isArray(completeFormData[key])) {
+          completeFormData[key] = [completeFormData[key]];
+        }
+        completeFormData[key].push(value);
+      } else {
+        completeFormData[key] = value;
+      }
+    });
+
     const cachedResult = searchHandler.checkCache(completeFormData);
     if (cachedResult) {
       (window as any).toast.info(
         "Usando itinerario guardado",
-        "Encontramos un itinerario previo para este destino."
+        "Encontramos un itinerario previo para este destino.",
       );
       const redirectUrl = searchHandler.buildRedirectUrl(
         destination,
         completeFormData,
-        completeFormData.activities || []
+        completeFormData.activities || [],
       );
       window.location.href = redirectUrl;
       return;
     }
 
-    // Mostrar loading
     const submitBtn = form.querySelector(
-      'button[type="submit"]'
+      'button[type="submit"]',
     ) as HTMLButtonElement;
-    const originalText = submitBtn?.textContent || "Crear Itinerario";
+    const originalText = submitBtn?.textContent || "Generar Propuesta";
 
     let loadingToastId: number | undefined;
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.textContent = "Generando itinerario...";
+      submitBtn.textContent = "Generando...";
       loadingToastId = (window as any).toast.loading(
-        "Creando tu itinerario personalizado..."
+        "Creando tu itinerario personalizado...",
       );
     }
 
     try {
       const result = await searchHandler.submitSearch(completeFormData);
 
-      // Cerrar toast de loading
       if (loadingToastId !== undefined) {
         (window as any).toast.dismiss(loadingToastId);
       }
@@ -185,36 +418,30 @@ const formFields = [
       if (result.success) {
         (window as any).toast.success(
           "¡Itinerario creado!",
-          "Redirigiendo a tu aventura..."
+          "Redirigiendo a tu aventura...",
         );
-
         const redirectUrl = searchHandler.buildRedirectUrl(
           destination,
           completeFormData,
-          completeFormData.activities || []
+          completeFormData.activities || [],
         );
-
-        // Pequeño delay para que se vea el toast de éxito
         setTimeout(() => {
           window.location.href = redirectUrl;
         }, 800);
       } else {
-        // Mostrar error específico de la API
         (window as any).toast.error(
           result.error?.message || "Error al generar itinerario",
-          result.error?.description
+          result.error?.description,
         );
       }
     } catch (error) {
-      // Cerrar toast de loading si existe
       if (loadingToastId !== undefined) {
         (window as any).toast.dismiss(loadingToastId);
       }
-
       console.error("Error inesperado:", error);
       (window as any).toast.error(
         "Error inesperado",
-        "Ha ocurrido un error. Por favor, intenta de nuevo."
+        "Ha ocurrido un error. Por favor, intenta de nuevo.",
       );
     } finally {
       if (submitBtn) {
