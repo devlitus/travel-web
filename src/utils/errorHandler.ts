@@ -33,11 +33,12 @@ export function handleApiError(
 
   // Error de validación Zod
   if (error instanceof ZodError) {
+    const issues = (error as any).errors || (error as any).issues || [];
     const validationError = new ValidationError(
       'Los datos de entrada no son válidos',
       {
-        errors: error.errors.map(err => ({
-          path: err.path.join('.'),
+        errors: issues.map((err: any) => ({
+          path: err.path?.join('.') || '',
           message: err.message,
           code: err.code,
         })),
